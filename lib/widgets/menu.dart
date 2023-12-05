@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:garduino_dashboard/widgets/history.dart';
 import 'package:garduino_dashboard/widgets/notifications.dart';
 import 'package:garduino_dashboard/widgets/settings_page.dart';
+import 'package:garduino_dashboard/widgets/blog_page.dart';
 
 import 'controller_page.dart';
 import 'aboutUs.dart';
@@ -35,7 +36,11 @@ class _MenuState extends State<Menu> {
     MenuModel(icon: 'assets/svg/setting.svg', title: "Settings"),
     MenuModel(icon: 'assets/svg/profile.svg', title: "About Us"),
     MenuModel(icon: 'assets/svg/slack.svg', title: "Cultivate"),
+    MenuModel(icon: 'assets/svg/remote.svg', title: "Blog"),
+
     MenuModel(icon: 'assets/svg/signout.svg', title: "Exit"),
+
+
   ];
 
   int selected = 0;
@@ -124,7 +129,13 @@ class _MenuState extends State<Menu> {
                               builder: (context) => const CultivatePage()),
                         );
                         break;
-                      case 7: //Exit
+                      case 7: //Blog
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => const BlogPage()),
+                        );
+                        break;
+                      case 8: //Exit
                         SystemNavigator.pop();
                       //close the application
                     }
