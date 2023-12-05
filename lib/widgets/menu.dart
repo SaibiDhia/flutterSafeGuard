@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:garduino_dashboard/Responsive.dart';
 import 'package:garduino_dashboard/main.dart';
+import 'package:garduino_dashboard/model/RecentFile.dart';
 import 'package:garduino_dashboard/model/menu_modal.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:garduino_dashboard/widgets/history.dart';
 import 'package:garduino_dashboard/widgets/notifications.dart';
+import 'package:garduino_dashboard/widgets/recent_files.dart';
 import 'package:garduino_dashboard/widgets/settings_page.dart';
 
 import 'controller_page.dart';
@@ -31,6 +33,7 @@ class _MenuState extends State<Menu> {
     //I just remove some stuff in this code that I think it will not needed soon.
     //MenuModel(icon: 'assets/svg/share-2.svg', title: "Connect"),
     MenuModel(icon: 'assets/svg/bell.svg', title: "Notification"),
+    MenuModel(icon: 'assets/', title: "Catastrophes"),
     MenuModel(icon: 'assets/svg/history.svg', title: "History"),
     MenuModel(icon: 'assets/svg/setting.svg', title: "Settings"),
     MenuModel(icon: 'assets/svg/profile.svg', title: "About Us"),
@@ -103,7 +106,7 @@ class _MenuState extends State<Menu> {
                       case 3: //History
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const HistoryPage()),
+                              builder: (context) => const RecentFiles()),
                         );
                         break;
                       case 4: //Settings
