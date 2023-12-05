@@ -36,8 +36,8 @@ class _CultivatePageState extends State<CultivatePage> {
           ),
         ),
       ),
-      // Add more widgets or customize as needed
+    
     );
   }
 }
-//need to plan here to implement changes
+

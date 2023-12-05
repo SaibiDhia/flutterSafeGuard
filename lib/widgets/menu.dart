@@ -13,6 +13,7 @@ import 'package:garduino_dashboard/widgets/settings_page.dart';
 import 'controller_page.dart';
 import 'aboutUs.dart';
 import 'cultivate_page.dart';
+import 'program_page.dart';
 
 class Menu extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -35,7 +36,9 @@ class _MenuState extends State<Menu> {
     MenuModel(icon: 'assets/svg/setting.svg', title: "Settings"),
     MenuModel(icon: 'assets/svg/profile.svg', title: "About Us"),
     MenuModel(icon: 'assets/svg/slack.svg', title: "Cultivate"),
+    MenuModel(icon: 'assets/svg/home.svg', title: "Program"),
     MenuModel(icon: 'assets/svg/signout.svg', title: "Exit"),
+   
   ];
 
   int selected = 0;
@@ -124,9 +127,15 @@ class _MenuState extends State<Menu> {
                               builder: (context) => const CultivatePage()),
                         );
                         break;
-                      case 7: //Exit
+                         case 7: //Program
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => const ProgramPage()),
+                        );
+                        break;
+                      case 8: //Exit
                         SystemNavigator.pop();
-                      //close the application
+                      
                     }
                   },
                   child: Row(
