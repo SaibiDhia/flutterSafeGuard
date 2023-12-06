@@ -10,7 +10,7 @@ import 'package:garduino_dashboard/pages/home/widgets/line_chart_card.dart';
 class HomePage extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
-  const HomePage({super.key, required this.scaffoldKey});
+  const HomePage({Key? key, required this.scaffoldKey}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,27 +18,38 @@ class HomePage extends StatelessWidget {
           height: Responsive.isDesktop(context) ? 30 : 20,
         );
 
-    return SizedBox(
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/your_backgroun2.jpg"), // Replace with your image asset
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-            child: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: Responsive.isMobile(context) ? 15 : 18),
-          child: Column(
-            children: [
-              SizedBox(
-                height: Responsive.isMobile(context) ? 5 : 18,
-              ),
-              Header(scaffoldKey: scaffoldKey),
-             /* _height(context),
-              const ActivityDetailsCard(),*/
-              _height(context),
-              LineChartCard(),
-              _height(context),
-              BarGraphCard(),
-              _height(context),
-            ],
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: Responsive.isMobile(context) ? 15 : 18,
+            ),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: Responsive.isMobile(context) ? 5 : 18,
+                ),
+                Header(scaffoldKey: scaffoldKey),
+                /* _height(context),
+                const ActivityDetailsCard(),*/
+                _height(context),
+                LineChartCard(),
+                _height(context),
+                BarGraphCard(),
+                _height(context),
+              ],
+            ),
           ),
-        )));
+        ),
+      ),
+    );
   }
 }

@@ -11,7 +11,7 @@ class BarGraphCard extends StatelessWidget {
   final List<BarGraphModel> data = [
     BarGraphModel(
         lable: "Blog by disaster",
-        color: const Color(0x80FFFFFF),
+        color: const Color(0xFFFFFF),
         graph: [
           GraphModel(x: 0, y: 8),
           GraphModel(x: 1, y: 10),
@@ -22,7 +22,7 @@ class BarGraphCard extends StatelessWidget {
          
     BarGraphModel(
         lable: "Average Response Time",
-        color: const Color(0x80FFFFFF),
+        color: const Color(0xFFFFFF),
         graph: [
           GraphModel(x: 0, y: 8),
           GraphModel(x: 1, y: 10),
@@ -90,7 +90,7 @@ class BarGraphCard extends StatelessWidget {
                                 lable[value.toInt()],
                                 style: const TextStyle(
                                     fontSize: 11,
-                                    color: Colors.grey,
+                                    color: Colors.white,
                                     fontWeight: FontWeight.w500),
                               ),
                             );

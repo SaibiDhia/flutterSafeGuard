@@ -8,6 +8,7 @@ class dashboard_page extends StatelessWidget {
   const dashboard_page({super.key});
 
   @override
+  
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DashboardPage(),

@@ -26,7 +26,7 @@ class Header extends StatelessWidget {
                   padding: EdgeInsets.all(3.0),
                   child: Icon(
                     Icons.menu,
-                    color: Colors.grey,
+                    color: Colors.white,
                     size: 25,
                   ),
                 ),
@@ -38,7 +38,7 @@ class Header extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   filled: true,
-                  
+
                   fillColor: cardBackgroundColor,
                   enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
