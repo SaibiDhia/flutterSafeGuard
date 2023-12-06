@@ -173,77 +173,177 @@ class BlogPage extends StatelessWidget {
     );
   }
 
-  void _showEditForm(BuildContext context, Blog blog) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Edit Blog'),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+ void _showEditForm(BuildContext context, Blog blog) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white.withOpacity(0.9),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        title: Center(
+          child: Text(
+          blog.title,  // Utiliser le titre du blog comme titre de la boîte de dialogue
+            style: TextStyle(
+              color: Colors.blue,
+            ),
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Include form fields for editing
-              // You can use TextFormField, etc.
-              Text('Title: ${blog.title}'),
-              Text('Type of Catastrophe: ${blog.type}'),
-              // Add more form fields as needed
+              _buildEditField('Title', blog.title),
+              _buildEditField('Type of Catastrophe', blog.type),
+              _buildEditField('Creation Date', blog.creationDate),
+              _buildEditField('Image', blog.image),
+              _buildEditField('Date de Prevention', blog.dateDePrevention),
+              _buildEditField('Region', blog.region),
+              _buildEditField('Pays', blog.pays),
+              _buildEditField('Statement', blog.statement),
+              _buildEditField('Description', blog.description),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                // Handle save button press
-                Navigator.of(context).pop();
-              },
-              child: Text('Save'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              // Handle save button press
+              // You can access the updated values using the controllers of the TextFormField widgets
+              // For example: _titleController.text, _typeController.text, etc.
+              Navigator.of(context).pop();
+            },
+            style: TextButton.styleFrom(
+              primary: Colors.green,
             ),
-            TextButton(
-              onPressed: () {
-                // Handle cancel button press
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
+            child: Text('Save'),
+          ),
+          TextButton(
+            onPressed: () {
+              // Handle cancel button press
+              Navigator.of(context).pop();
+            },
+            style: TextButton.styleFrom(
+              primary: Colors.red,
             ),
-          ],
-        );
-      },
-    );
-  }
+            child: Text('Cancel'),
+          ),
+        ],
+      );
+    },
+  );
+}
 
-  void _showDetailsDialog(BuildContext context, Blog blog) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Détails du Blog'),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Titre : ${blog.title}'),
-              Text('Image : ${blog.image}'),
-              Text('Type de Catastrophe : ${blog.type}'),
-              Text('Date de Prevention: ${blog.dateDePrevention}'),
-              Text('Region: ${blog.region}'),
-              Text('Pays: ${blog.pays}'),
-              Text('Statement: ${blog.statement}'),
-              Text('Description: ${blog.description}'),
-              // Ajoutez plus de détails au besoin
-            ],
+
+Widget _buildEditField(String label, String initialValue) {
+  // Vous pouvez utiliser TextEditingController pour contrôler le texte dans TextFormField
+  TextEditingController _controller = TextEditingController(text: initialValue);
+
+  return Container(
+    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Fermer'),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: _controller,
+          style: TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.0),
             ),
+          ),
+        ),
+        const SizedBox(height: 16),
+      ],
+    ),
+  );
+}
+
+ void _showDetailsDialog(BuildContext context, Blog blog) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        title: Text(
+          'Détails du Blog',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDetailRow('Titre', blog.title),
+            _buildDetailRow('Image', blog.image),
+            _buildDetailRow('Type de Catastrophe', blog.type),
+            _buildDetailRow('Date de Prevention', blog.dateDePrevention),
+            _buildDetailRow('Region', blog.region),
+            _buildDetailRow('Pays', blog.pays),
+            _buildDetailRow('Statement', blog.statement),
+            _buildDetailRow('Description', blog.description),
+            // Ajoutez plus de détails au besoin
           ],
-        );
-      },
-    );
-  }
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: TextButton.styleFrom(
+              primary: Colors.black,
+            ),
+            child: Text('Fermer'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Widget _buildDetailRow(String label, String value) {
+  return Container(
+    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          '$label :',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
 
   void _showCommentsDialog(BuildContext context, String title) {
   // Exemple de liste de commentaires avec identifiants uniques
