@@ -53,12 +53,12 @@ class LineChartCard extends StatelessWidget {
   ];
 
   final leftTitle = {
-    0: '34.0°C',
-    20: '34.5°C',
-    40: '35.2°C',
-    60: '36.5°C',
-    80: '37°C',
-    100: '39.3°C'
+    0: '0',
+    20: '1000',
+    40: '2000',
+    60: '3000',
+    80: '4000',
+    100: '5000'
   };
   final bottomTitle = {
     0: 'Jan',
@@ -82,7 +82,7 @@ class LineChartCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            "Garden Temperature Overview",
+            "Catastrophes Chart",
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
           const SizedBox(
