@@ -1,5 +1,5 @@
- import 'package:flutter/material.dart';
-import '../model/cours.dart'; // Assurez-vous d'importer le bon fichier de modèle
+import 'package:flutter/material.dart';
+import '../model/cours.dart';
 
 class CoursProgrammeTable extends StatefulWidget {
   final List<CoursProgramme> coursList;
@@ -65,36 +65,52 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
                     child: Center(child: Text(cours.image)),
                   ),
                 ),
-                DataCell(Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        // Action à effectuer lors de la modification
-                        // (vous pouvez afficher une boîte de dialogue, une nouvelle page, etc.)
-                      },
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
-                        padding: EdgeInsets.all(8),
-                        child: Icon(Icons.edit, color: Colors.blue),
+                DataCell(
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          _showModificationDialog(context, cours);
+                        },
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 300),
+                          padding: EdgeInsets.all(8),
+                          child: Icon(Icons.edit, color: Colors.blue),
+                        ),
                       ),
-                    ),
-                    Container(
-                      height: 24,
-                      width: 1,
-                      color: Colors.black,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        _showDeleteConfirmationDialog(context, cours);
-                      },
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
-                        padding: EdgeInsets.all(8),
-                        child: Icon(Icons.delete, color: Colors.red),
+                      Container(
+                        height: 24,
+                        width: 1,
+                        color: Colors.black,
                       ),
-                    ),
-                  ],
-                )),
+                      InkWell(
+                        onTap: () {
+                          _showDeleteConfirmationDialog(context, cours);
+                        },
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 300),
+                          padding: EdgeInsets.all(8),
+                          child: Icon(Icons.delete, color: Colors.red),
+                        ),
+                      ),
+                      Container(
+                        height: 24,
+                        width: 1,
+                        color: Colors.black,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          _showFeedbackList(context, cours);
+                        },
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 300),
+                          padding: EdgeInsets.all(8),
+                          child: Icon(Icons.comment, color: Colors.green),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             );
           }).toList(),
@@ -131,9 +147,47 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
     );
   }
 
+  Future<void> _showFeedbackList(BuildContext context, CoursProgramme cours) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Les avis concernant ${cours.type}'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+              
+                ListTile(
+                  title: Text('Une lecture instructive et stimulante. Merci pour ces insights'),
+                ),
+                ListTile(
+                  title: Text('C\'est un régal intellectuel !'),
+                ),
+                // ...
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Fermer'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _deleteCours(CoursProgramme cours) {
     setState(() {
       widget.coursList.remove(cours);
     });
+  }
+
+  Future<void> _showModificationDialog(BuildContext context, CoursProgramme cours) async {
+    
   }
 }
