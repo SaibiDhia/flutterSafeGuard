@@ -28,14 +28,14 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   List<MenuModel> menu = [
     MenuModel(icon: 'assets/svg/home.svg', title: "Dashboard"),
-    MenuModel(icon: 'assets/svg/remote.svg', title: "Controller"),
+   /* MenuModel(icon: 'assets/svg/remote.svg', title: "Controller"),
     //I just remove some stuff in this code that I think it will not needed soon.
     //MenuModel(icon: 'assets/svg/share-2.svg', title: "Connect"),
     MenuModel(icon: 'assets/svg/bell.svg', title: "Notification"),
     MenuModel(icon: 'assets/svg/history.svg', title: "History"),
     MenuModel(icon: 'assets/svg/setting.svg', title: "Settings"),
     MenuModel(icon: 'assets/svg/profile.svg', title: "About Us"),
-    MenuModel(icon: 'assets/svg/slack.svg', title: "Cultivate"),
+    MenuModel(icon: 'assets/svg/slack.svg', title: "Cultivate"),*/
     MenuModel(icon: 'assets/svg/remote.svg', title: "Blog"),
 
     MenuModel(icon: 'assets/svg/signout.svg', title: "Exit"),
@@ -92,7 +92,7 @@ class _MenuState extends State<Menu> {
                               builder: (context) => const MyApp()),
                         );
                         break;
-                      case 1: // Controller
+                      /*case 1: // Controller
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => const ControllerPage()),
@@ -128,14 +128,14 @@ class _MenuState extends State<Menu> {
                           MaterialPageRoute(
                               builder: (context) => const CultivatePage()),
                         );
-                        break;
-                      case 7: //Blog
+                        break;*/
+                      case 1: //Blog
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => const BlogPage()),
                         );
                         break;
-                      case 8: //Exit
+                      case 3: //Exit
                         SystemNavigator.pop();
                       //close the application
                     }
