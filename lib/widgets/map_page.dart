@@ -3,6 +3,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:garduino_dashboard/pages/home/widgets/card_stat.dart';
+import 'package:garduino_dashboard/model/ZoneDeDanger.dart';
+import 'package:garduino_dashboard/services/ApiZoneDeDanger.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -12,6 +14,25 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  List<ZoneDeDanger> zoneDeDangerList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch zone de danger data when the page loads
+    _fetchZoneDeDangerData();
+  }
+
+  Future<void> _fetchZoneDeDangerData() async {
+    // Fetch zone de danger data from API
+    List<ZoneDeDanger> zones = await ApiZoneDeDanger.getZoneDeDanger();
+
+    // Update the state with the fetched data
+    setState(() {
+      zoneDeDangerList = zones;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,18 +41,17 @@ class _MapPageState extends State<MapPage> {
         children: [
           Expanded(
             child: Container(
-              width: MediaQuery.of(context).size.width /
-                  2.5, // Adjust the width as needed
+              width: MediaQuery.of(context).size.width / 2.5,
               height: MediaQuery.of(context).size.height,
               color: const Color(0xFFf2f6fe),
               child: CardStat(
                 title: 'Nombre Zone de Danger',
-                randomNumber: 42, // Replace with your random number logic
+                randomNumber: zoneDeDangerList.length,
               ),
             ),
           ),
           Expanded(
-            flex: 2, // Adjust the flex factor to make the map take more space
+            flex: 2,
             child: Container(
               height: MediaQuery.of(context).size.height,
               child: FlutterMap(
@@ -46,9 +66,12 @@ class _MapPageState extends State<MapPage> {
                     userAgentPackageName: 'com.example.app',
                   ),
                   MarkerLayer(
-                    markers: [
-                      Marker(
-                        point: LatLng(30, 40),
+                    markers: zoneDeDangerList.map((zone) {
+                      return Marker(
+                        point: LatLng(
+                          zone.latitudeDeZoneDanger,
+                          zone.longitudeDeZoneDanger,
+                        ),
                         width: 80,
                         height: 80,
                         child: Icon(
@@ -56,8 +79,8 @@ class _MapPageState extends State<MapPage> {
                           color: Colors.red,
                           size: 40,
                         ),
-                      ),
-                    ],
+                      );
+                    }).toList(),
                   ),
                   CircleLayer(
                     circles: [

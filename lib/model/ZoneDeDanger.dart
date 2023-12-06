@@ -1,8 +1,17 @@
 class ZoneDeDanger {
-  final String nom;
-  final double latitude;
-  final double longitude;
-
+  final double latitudeDeZoneDanger;
+  final double longitudeDeZoneDanger;
+  final String idUser;
   ZoneDeDanger(
-      {required this.nom, required this.latitude, required this.longitude});
+      {required this.latitudeDeZoneDanger,
+      required this.longitudeDeZoneDanger,
+      required this.idUser});
+
+  factory ZoneDeDanger.fromJson(Map<String, dynamic> json) {
+    return ZoneDeDanger(
+      latitudeDeZoneDanger: json['latitudeDeZoneDanger'],
+      longitudeDeZoneDanger: json['longitudeDeZoneDanger'],
+      idUser: json['idUser'],
+    );
+  }
 }
