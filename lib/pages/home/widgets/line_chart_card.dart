@@ -53,26 +53,26 @@ class LineChartCard extends StatelessWidget {
   ];
 
   final leftTitle = {
-    0: '34.0°C',
-    20: '34.5°C',
-    40: '35.2°C',
-    60: '36.5°C',
-    80: '37°C',
-    100: '39.3°C'
+    0: '20',
+    20: '40',
+    40: '60',
+    60: '75',
+    80: '90',
+    100: '100'
   };
   final bottomTitle = {
-    0: 'Jan',
-    10: 'Feb',
-    20: 'Mar',
-    30: 'Apr',
-    40: 'May',
-    50: 'Jun',
-    60: 'Jul',
-    70: 'Aug',
-    80: 'Sep',
-    90: 'Oct',
-    100: 'Nov',
-    110: 'Dec',
+    0: 'P1',
+    10: 'P2',
+    20: 'P3',
+    30: 'P4',
+    40: 'P5',
+    50: 'P6',
+    60: 'P7',
+    70: 'P8',
+    80: 'P9',
+    90: 'P10',
+    100: 'P11',
+    110: 'P12',
   };
 
   @override
@@ -82,7 +82,7 @@ class LineChartCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            "Garden Temperature Overview",
+            "Nombre de consultation par programme",
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
           const SizedBox(

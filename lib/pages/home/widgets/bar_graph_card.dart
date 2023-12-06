@@ -10,7 +10,7 @@ class BarGraphCard extends StatelessWidget {
 
   final List<BarGraphModel> data = [
     BarGraphModel(
-        lable: "Nombre d'utilisateurs consultés les Cours (Day)",
+        lable: "Perfermance par cetegorie",
         color: const Color.fromARGB(248, 43, 87, 245),
         graph: [
           GraphModel(x: 0, y: 8),
@@ -22,7 +22,7 @@ class BarGraphCard extends StatelessWidget {
         ]),
         
     BarGraphModel(
-        lable: "Soil Nutrition (Day)",
+        lable: "Taux de commentaire par programme",
         color: const Color.fromARGB(255, 241, 179, 117),
         graph: [
           GraphModel(x: 0, y: 8),
@@ -32,7 +32,7 @@ class BarGraphCard extends StatelessWidget {
           GraphModel(x: 4, y: 6),
           GraphModel(x: 5, y: 5),
         ]),
-    BarGraphModel(
+    /*BarGraphModel(
         lable: "Plants Hydration Level (Day)",
         color: const Color(0xFF20AEF3),
         graph: [
@@ -42,10 +42,10 @@ class BarGraphCard extends StatelessWidget {
           GraphModel(x: 3, y: 4),
           GraphModel(x: 4, y: 4),
           GraphModel(x: 5, y: 10),
-        ]),
+        ]),*/
   ];
 
-  final lable = ['M', 'T', 'W', 'T', 'F', 'S'];
+  final lable = ['1', '2', '3', '4', '5', '6'];
 
   @override
   Widget build(BuildContext context) {

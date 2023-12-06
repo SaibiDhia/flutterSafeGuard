@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../model/cours.dart';
+import 'addcours.dart';
 
 class CoursProgrammeTable extends StatefulWidget {
   final List<CoursProgramme> coursList;
