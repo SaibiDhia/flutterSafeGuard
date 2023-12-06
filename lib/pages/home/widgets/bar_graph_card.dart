@@ -10,7 +10,7 @@ class BarGraphCard extends StatelessWidget {
 
   final List<BarGraphModel> data = [
     BarGraphModel(
-        lable: "Water Level (Day)",
+        lable: "Nombre d'utilisateurs consultés les Cours (Day)",
         color: const Color.fromARGB(248, 43, 87, 245),
         graph: [
           GraphModel(x: 0, y: 8),
@@ -20,6 +20,7 @@ class BarGraphCard extends StatelessWidget {
           GraphModel(x: 4, y: 4),
           GraphModel(x: 5, y: 6),
         ]),
+        
     BarGraphModel(
         lable: "Soil Nutrition (Day)",
         color: const Color.fromARGB(255, 241, 179, 117),

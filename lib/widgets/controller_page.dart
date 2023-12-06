@@ -12,7 +12,6 @@ class ControllerPage extends StatefulWidget {
   const ControllerPage({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _ControllerPageState createState() => _ControllerPageState();
 }
 
@@ -23,10 +22,6 @@ class _ControllerPageState extends State<ControllerPage> {
     setState(() {
       _isDeviceOn = !_isDeviceOn;
     });
-
-    // Implement the logic for sending power on/off command to the remote device
-    //print('Device power ${_isDeviceOn ? 'on' : 'off'}');
-    // You can replace the print statement with actual command sending logic
   }
 
   void _onButtonPressed(String action) {
