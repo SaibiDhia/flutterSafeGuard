@@ -9,7 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:garduino_dashboard/widgets/history.dart';
 import 'package:garduino_dashboard/widgets/notifications.dart';
 import 'package:garduino_dashboard/widgets/settings_page.dart';
-
+import 'package:garduino_dashboard/widgets/map_page.dart';
 import 'controller_page.dart';
 import 'aboutUs.dart';
 import 'cultivate_page.dart';
@@ -27,7 +27,9 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   List<MenuModel> menu = [
     MenuModel(icon: 'assets/svg/home.svg', title: "Dashboard"),
+
     MenuModel(icon: 'assets/svg/remote.svg', title: "Controller"),
+    MenuModel(icon: 'assets/svg/home.svg', title: "Map"),
     //I just remove some stuff in this code that I think it will not needed soon.
     //MenuModel(icon: 'assets/svg/share-2.svg', title: "Connect"),
     MenuModel(icon: 'assets/svg/bell.svg', title: "Notification"),
@@ -93,38 +95,46 @@ class _MenuState extends State<Menu> {
                               builder: (context) => const ControllerPage()),
                         );
                         break;
+                      case 2: // Map
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const MapPage(),
+                          ),
+                        );
+
+                        break;
                       // Add similar cases for other menu items
-                      case 2: //Notification
+                      case 3: //Notification
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => const NotificationPage()),
                         );
                         break;
-                      case 3: //History
+                      case 4: //History
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => const HistoryPage()),
                         );
                         break;
-                      case 4: //Settings
+                      case 5: //Settings
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => const SettingsPage2()),
                         );
                         break;
-                      case 5: //About Us
+                      case 6: //About Us
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => const AboutUsPage()),
                         );
                         break;
-                      case 6: //Cultivate Crops
+                      case 7: //Cultivate Crops
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => const CultivatePage()),
                         );
                         break;
-                      case 7: //Exit
+                      case 8: //Exit
                         SystemNavigator.pop();
                       //close the application
                     }
