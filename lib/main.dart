@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Garduino',
+      title: 'SafeGuard',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
       theme: ThemeData(
@@ -37,6 +37,6 @@ class MyApp extends StatelessWidget {
       home: DashBoard(),
     );
   }
-}
+} 
 //add connection page in this code
 //add UI in different page..

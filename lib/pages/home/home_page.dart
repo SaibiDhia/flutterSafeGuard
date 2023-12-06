@@ -30,8 +30,8 @@ class HomePage extends StatelessWidget {
                 height: Responsive.isMobile(context) ? 5 : 18,
               ),
               Header(scaffoldKey: scaffoldKey),
-              _height(context),
-              const ActivityDetailsCard(),
+             /* _height(context),
+              const ActivityDetailsCard(),*/
               _height(context),
               LineChartCard(),
               _height(context),

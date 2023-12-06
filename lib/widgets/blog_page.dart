@@ -147,16 +147,18 @@ class BlogPage extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     // Gérer le bouton Supprimer
+                    _showDeleteConfirmation(context , blog.title);
                   },
                   icon: Icon(Icons.delete, color: Colors.red),
                 ),
-                IconButton(
+               IconButton(
                   onPressed: () {
-                    // Gérer le bouton Détails
-                    _showDetailsDialog(context, blog);
-                  },
+                     // Gérer le bouton Détails
+                   _showDetailsDialog(context, blog);
+                   },
                   icon: Icon(Icons.details, color: Colors.blue),
-                ),
+),
+
                 IconButton(
                   onPressed: () {
                     // Gérer le bouton Commentaire
@@ -428,5 +430,73 @@ Widget _buildCommentRow(Map<String, String> comment) {
     ),
   );
 }
+void _showDeleteConfirmation(BuildContext context, String blogTitle) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.transparent,
+        content: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Delete Confirmation',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                'Do you want to delete the blog "$blogTitle"?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16.0,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      // Gérer le bouton Supprimer
+                      // Ajoutez ici la logique pour supprimer le blog avec le titre associé
+                      print('Delete the blog with title $blogTitle');
+                      Navigator.of(context).pop(); // Fermer la boîte de dialogue de confirmation
+                    },
+                    style: TextButton.styleFrom(
+                      primary: Colors.red,
+                    ),
+                    child: Text('Delete'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Fermer la boîte de dialogue de confirmation
+                    },
+                    style: TextButton.styleFrom(
+                      primary: Colors.black,
+                    ),
+                    child: Text('Cancel'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
 
 }

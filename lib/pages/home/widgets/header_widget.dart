@@ -38,6 +38,7 @@ class Header extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   filled: true,
+                  
                   fillColor: cardBackgroundColor,
                   enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.transparent),
