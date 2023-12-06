@@ -304,24 +304,29 @@ class BlogPage extends StatelessWidget {
 }
 
 Widget _buildCommentRow(Map<String, String> comment) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Row(
-        children: [
-          Icon(Icons.account_circle, size: 40, color: Colors.blue),
-          const SizedBox(width: 8),
-          Text(comment['comment'] ?? ''),
-        ],
-      ),
-      IconButton(
-        onPressed: () {
-          // Ajoutez ici la logique pour supprimer le commentaire avec l'ID associé
-          print('Supprimer le commentaire avec ID ${comment['id']}');
-        },
-        icon: Icon(Icons.delete, color: Colors.red),
-      ),
-    ],
+  final commentText = comment['comment'] ?? '';
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 4),
+    child: Row(
+      children: [
+        Icon(Icons.account_circle, size: 40, color: Colors.blue),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            commentText,
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        IconButton(
+          onPressed: () {
+            // Ajoutez ici la logique pour supprimer le commentaire avec l'ID associé
+            print('Supprimer le commentaire avec ID ${comment['id']}');
+          },
+          icon: Icon(Icons.delete, color: Colors.red),
+        ),
+      ],
+    ),
   );
 }
+
 }
