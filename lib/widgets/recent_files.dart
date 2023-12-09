@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../const.dart';
-import '../model/RecentFile.dart';
 import '../model/Catastrophe.dart';
 
 class RecentFiles extends StatefulWidget {
@@ -13,11 +12,18 @@ class RecentFiles extends StatefulWidget {
 }
 
 class _RecentFilesState extends State<RecentFiles> {
-  List<Catastrophe> catastrophes = [];
+  late List<Catastrophe> catastrophes;
+  late int _rowsPerPage;
+  late int _sortColumnIndex;
+  late bool _sortAscending;
 
   @override
   void initState() {
     super.initState();
+    catastrophes = [];
+    _rowsPerPage = 10;
+    _sortColumnIndex = 0;
+    _sortAscending = true;
     fetchData();
   }
 
@@ -27,6 +33,7 @@ class _RecentFilesState extends State<RecentFiles> {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
+      print(data); // Print the response body
       setState(() {
         catastrophes = data.map((json) => Catastrophe.fromJson(json)).toList();
       });
@@ -52,23 +59,47 @@ class _RecentFilesState extends State<RecentFiles> {
           ),
           SizedBox(
             width: double.infinity,
-            child: DataTable(
-              columnSpacing: 16,
+            child: PaginatedDataTable(
+              header: const Text(''),
+              rowsPerPage: _rowsPerPage,
+              onRowsPerPageChanged: (newRowsPerPage) {
+                setState(() {
+                  _rowsPerPage = newRowsPerPage!;
+                });
+              },
+              availableRowsPerPage: [10, 20, 30],
+              sortAscending: _sortAscending,
+              sortColumnIndex: _sortColumnIndex,
               columns: [
                 DataColumn(
                   label: Text("Titre"),
+                  onSort: (columnIndex, ascending) {
+                    _sort<String>((c) => c.titre, columnIndex, ascending);
+                  },
                 ),
                 DataColumn(
                   label: Text("Type"),
+                  onSort: (columnIndex, ascending) {
+                    _sort<String>((c) => c.type, columnIndex, ascending);
+                  },
                 ),
                 DataColumn(
                   label: Text("Description"),
+                  onSort: (columnIndex, ascending) {
+                    _sort<String>((c) => c.description, columnIndex, ascending);
+                  },
                 ),
                 DataColumn(
                   label: Text("Date"),
+                  onSort: (columnIndex, ascending) {
+                    _sort<DateTime>((c) => c.date, columnIndex, ascending);
+                  },
                 ),
                 DataColumn(
                   label: Text("Magnitude"),
+                  onSort: (columnIndex, ascending) {
+                    _sort<double>((c) => c.magnitude, columnIndex, ascending);
+                  },
                 ),
                 DataColumn(
                   label: Text("Supprimer"),
@@ -77,51 +108,100 @@ class _RecentFilesState extends State<RecentFiles> {
                   label: Text("Modifier"),
                 ),
               ],
-              rows: List.generate(
-                catastrophes.length,
-                (index) => catastropheDataRow(catastrophes[index]),
-              ),
+              source: _DataSource(context, catastrophes, _handleDelete),
             ),
           ),
         ],
       ),
     );
   }
+
+  void _handleDelete(Catastrophe catastrophe) async {
+    final response = await http.delete(
+      Uri.parse('http://localhost:9090/catastrophe/${catastrophe.id}'),
+    );
+
+    if (response.statusCode == 204) {
+      // Delete successful, update the UI or fetch data again
+      setState(() {
+        catastrophes.remove(catastrophe);
+      });
+    } else {
+      // Delete failed, handle the error
+      print('Failed to delete the catastrophe.');
+    }
+  }
+
+  void _sort<T extends Comparable>(
+    T Function(Catastrophe d) getField,
+    int columnIndex,
+    bool ascending,
+  ) {
+    catastrophes.sort((a, b) {
+      final aValue = getField(a);
+      final bValue = getField(b);
+      return ascending ? aValue.compareTo(bValue) : bValue.compareTo(aValue);
+    });
+
+    setState(() {
+      _sortColumnIndex = columnIndex;
+      _sortAscending = ascending;
+    });
+  }
 }
 
-DataRow catastropheDataRow(Catastrophe catastrophe) {
-  return DataRow(
-    cells: [
-      DataCell(
-        Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(catastrophe.titre),
-            ),
-          ],
+class _DataSource extends DataTableSource {
+  final BuildContext context;
+  final List<Catastrophe> catastrophes;
+  final Function(Catastrophe) onDeletePressed;
+
+  _DataSource(this.context, this.catastrophes, this.onDeletePressed);
+
+  @override
+  DataRow getRow(int index) {
+    final catastrophe = catastrophes[index];
+    return DataRow(
+      cells: [
+        DataCell(
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(catastrophe.titre),
+              ),
+            ],
+          ),
         ),
-      ),
-      DataCell(Text(catastrophe.type)),
-      DataCell(Text(catastrophe.description)),
-      DataCell(Text(catastrophe.date.toLocal().toString())),
-      DataCell(Text(catastrophe.magnitude.toString())),
-      DataCell(
-        IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: () {
-            // Handle delete button press
-          },
+        DataCell(Text(catastrophe.type)),
+        DataCell(Text(catastrophe.description)),
+        DataCell(Text(catastrophe.date.toLocal().toString())),
+        DataCell(Text(catastrophe.magnitude.toString())),
+        DataCell(
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () {
+              onDeletePressed(catastrophe);
+            },
+          ),
         ),
-      ),
-      DataCell(
-        IconButton(
-          icon: Icon(Icons.edit),
-          onPressed: () {
-            // Handle edit button press
-          },
+        DataCell(
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              // Handle edit button press
+            },
+          ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
+
+  @override
+  int get rowCount => catastrophes.length;
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get selectedRowCount => 0;
 }
