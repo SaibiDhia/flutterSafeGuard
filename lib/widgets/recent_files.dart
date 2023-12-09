@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
-import '../../../constants.dart';
-import '../../../models/RecentFile.dart';
-import '../../../models/Catastrophe.dart';
+import '../const.dart';
+import '../model/RecentFile.dart';
+import '../model/Catastrophe.dart';
 
 class RecentFiles extends StatefulWidget {
   const RecentFiles({Key? key}) : super(key: key);
@@ -39,9 +38,9 @@ class _RecentFilesState extends State<RecentFiles> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(defaultPadding),
+      padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: secondaryColor,
+        color: Color(0xFF2A2D3E),
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
       child: Column(
@@ -54,7 +53,7 @@ class _RecentFilesState extends State<RecentFiles> {
           SizedBox(
             width: double.infinity,
             child: DataTable(
-              columnSpacing: defaultPadding,
+              columnSpacing: 16,
               columns: [
                 DataColumn(
                   label: Text("Titre"),
@@ -97,7 +96,7 @@ DataRow catastropheDataRow(Catastrophe catastrophe) {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(catastrophe.titre),
             ),
           ],
