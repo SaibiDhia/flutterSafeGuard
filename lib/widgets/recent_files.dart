@@ -1,85 +1,117 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:garduino_dashboard/model/RecentFile.dart';
-import 'package:garduino_dashboard/pages/home/widgets/line_chart_card.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class RecentFiles extends StatelessWidget {
-  const RecentFiles({
-    Key? key,
-  }) : super(key: key);
+import '../../../constants.dart';
+import '../../../models/RecentFile.dart';
+import '../../../models/Catastrophe.dart';
+
+class RecentFiles extends StatefulWidget {
+  const RecentFiles({Key? key}) : super(key: key);
+
+  @override
+  _RecentFilesState createState() => _RecentFilesState();
+}
+
+class _RecentFilesState extends State<RecentFiles> {
+  List<Catastrophe> catastrophes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final response =
+        await http.get(Uri.parse('http://localhost:9090/catastrophe/'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        catastrophes = data.map((json) => Catastrophe.fromJson(json)).toList();
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Color(0xFF2A2D3E),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Liste des catastrophes",
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: DataTable(
-                columnSpacing: 16,
-                // minWidth: 600,
-                columns: [
-                  DataColumn(
-                    label: Text("Description"),
-                  ),
-                  DataColumn(
-                    label: Text("Date"),
-                  ),
-                  DataColumn(
-                    label: Text("Magnitude"),
-                  ),
-                  DataColumn(
-                    label: Text("Supprimer"),
-                  ),
-                  DataColumn(
-                    label: Text("Modifier"),
-                  ),
-                ],
-                rows: List.generate(
-                  demoRecentFiles.length,
-                  (index) => recentFileDataRow(demoRecentFiles[index]),
+    return Container(
+      padding: EdgeInsets.all(defaultPadding),
+      decoration: BoxDecoration(
+        color: secondaryColor,
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Liste des catastrophes",
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: DataTable(
+              columnSpacing: defaultPadding,
+              columns: [
+                DataColumn(
+                  label: Text("Titre"),
                 ),
+                DataColumn(
+                  label: Text("Type"),
+                ),
+                DataColumn(
+                  label: Text("Description"),
+                ),
+                DataColumn(
+                  label: Text("Date"),
+                ),
+                DataColumn(
+                  label: Text("Magnitude"),
+                ),
+                DataColumn(
+                  label: Text("Supprimer"),
+                ),
+                DataColumn(
+                  label: Text("Modifier"),
+                ),
+              ],
+              rows: List.generate(
+                catastrophes.length,
+                (index) => catastropheDataRow(catastrophes[index]),
               ),
             ),
-            LineChartCard()
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
-DataRow recentFileDataRow(RecentFile fileInfo) {
+DataRow catastropheDataRow(Catastrophe catastrophe) {
   return DataRow(
     cells: [
       DataCell(
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(fileInfo.title!),
+              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+              child: Text(catastrophe.titre),
             ),
           ],
         ),
       ),
-      DataCell(Text(fileInfo.date!)),
-      DataCell(Text(fileInfo.size!)),
+      DataCell(Text(catastrophe.type)),
+      DataCell(Text(catastrophe.description)),
+      DataCell(Text(catastrophe.date.toLocal().toString())),
+      DataCell(Text(catastrophe.magnitude.toString())),
       DataCell(
         IconButton(
           icon: Icon(Icons.delete),
           onPressed: () {
-            print('Delete button pressed for file ${fileInfo.title}');
+            // Handle delete button press
           },
         ),
       ),
@@ -87,7 +119,7 @@ DataRow recentFileDataRow(RecentFile fileInfo) {
         IconButton(
           icon: Icon(Icons.edit),
           onPressed: () {
-            print('Edit button pressed for file ${fileInfo.title}');
+            // Handle edit button press
           },
         ),
       ),
