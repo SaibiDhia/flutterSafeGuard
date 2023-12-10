@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AddCoursPage extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +22,6 @@ class AddCoursForm extends StatefulWidget {
 }
 
 class _AddCoursFormState extends State<AddCoursForm> {
-  // Ajoutez les contrôleurs pour les champs du formulaire
   final TextEditingController typeController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController imageController = TextEditingController();
@@ -45,10 +45,6 @@ class _AddCoursFormState extends State<AddCoursForm> {
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: () {
-            // Ajoutez ici la logique pour ajouter le cours à la liste
-            // en utilisant les valeurs des contrôleurs.
-            // Assurez-vous de gérer la navigation ou de mettre à jour
-            // l'état selon vos besoins.
           },
           child: Text('Ajouter le Cours'),
         ),

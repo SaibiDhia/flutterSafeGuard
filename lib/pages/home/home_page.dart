@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:garduino_dashboard/pages/home/widgets/header_widget.dart';
 import 'package:garduino_dashboard/responsive.dart';
-import 'package:garduino_dashboard/pages/home/widgets/activity_details_card.dart';
+//import 'package:garduino_dashboard/pages/home/widgets/activity_details_card.dart';
 import 'package:garduino_dashboard/pages/home/widgets/bar_graph_card.dart';
 import 'package:garduino_dashboard/pages/home/widgets/line_chart_card.dart';
 
@@ -31,11 +31,12 @@ class HomePage extends StatelessWidget {
               ),
               Header(scaffoldKey: scaffoldKey),
               _height(context),
-              const ActivityDetailsCard(),
+              //const ActivityDetailsCard(),
+              BarGraphCard(),
               _height(context),
               LineChartCard(),
               _height(context),
-              BarGraphCard(),
+              
               _height(context),
             ],
           ),

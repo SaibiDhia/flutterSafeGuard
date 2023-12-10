@@ -1,21 +1,9 @@
-import 'package:flutter/material.dart';
-import '../../model/cours.dart'; // Assurez-vous d'importer le bon fichier de modèle
-import '../../pages/cours_row.dart'; // Assurez-vous d'importer le bon fichier pour le tableau
+/*import 'package:flutter/material.dart';
+import '../../model/cours.dart';
+import '../../pages/cours_row.dart'; 
 
 class DashboardCours extends StatelessWidget {
-  final List<CoursProgramme> coursList = [
-    CoursProgramme(
-      type: 'Introduction',
-      description: 'Description de l\'introduction',
-      image: 'image_intro.jpg',
-    ),
-    CoursProgramme(
-      type: 'CAUSE',
-      description: 'Description de la cause',
-      image: 'image_cause.jpg',
-    ),
-    // Ajouter d'autres cours si nécessaire
-  ];
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +21,7 @@ class DashboardCours extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color.fromARGB(255, 80, 57, 57),
+                  primary: Color.fromARGB(255, 86, 29, 29),
                 ),
                 onPressed: () {
                 },
@@ -45,4 +33,74 @@ class DashboardCours extends StatelessWidget {
       ),
     );
   }
+}*/
+import 'package:flutter/material.dart';
+import '../../model/cours.dart';
+import '../../pages/cours_row.dart';
+import '../../services/cours.dart';
+
+class DashboardCours extends StatefulWidget {
+  @override
+  _DashboardCoursState createState() => _DashboardCoursState();
 }
+
+class _DashboardCoursState extends State<DashboardCours> {
+  CoursService coursService = CoursService();
+  List<CoursProgramme> cours = [];
+
+
+
+  Future<void> fetchCours() async {
+    try {
+      List<CoursProgramme> fetchedCours = await coursService.getCours();
+
+      setState(() {
+        cours = fetchedCours;
+       
+      });
+    } catch (error) {
+      print('Erreur lors de la récupération des cours : $error');
+    }
+  }
+
+  Future<void> supprimerCours(CoursProgramme coursProgramme) async {
+    try {
+      await coursService.deleteCours(coursProgramme.id);
+      fetchCours(); // Refresh the livraisons list after deletion
+    } catch (error) {
+      print('Erreur lors de la suppression de la cours: $error');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCours();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Tableau de bord des cours'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child:  CoursProgrammeTable (
+              cours: cours,
+              onDelete: supprimerCours,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: DashboardCours(),
+  ));
+}
+

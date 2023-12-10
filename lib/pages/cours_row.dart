@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../model/cours.dart';
-import 'addcours.dart';
+
+/*
 
 class CoursProgrammeTable extends StatefulWidget {
   final List<CoursProgramme> coursList;
@@ -8,10 +9,10 @@ class CoursProgrammeTable extends StatefulWidget {
   const CoursProgrammeTable({required this.coursList});
 
   @override
-  _CoursProgrammeTableState createState() => _CoursProgrammeTableState();
+  CoursProgrammeTableState createState() => CoursProgrammeTableState();
 }
 
-class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
+class CoursProgrammeTableState extends State<CoursProgrammeTable> {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -71,7 +72,7 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
                     children: [
                       InkWell(
                         onTap: () {
-                          _showModificationDialog(context, cours);
+                          showModificationDialog(context, cours);
                         },
                         child: AnimatedContainer(
                           duration: Duration(milliseconds: 300),
@@ -86,7 +87,7 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
                       ),
                       InkWell(
                         onTap: () {
-                          _showDeleteConfirmationDialog(context, cours);
+                          showDeleteConfirmationDialog(context, cours);
                         },
                         child: AnimatedContainer(
                           duration: Duration(milliseconds: 300),
@@ -101,7 +102,7 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
                       ),
                       InkWell(
                         onTap: () {
-                          _showFeedbackList(context, cours);
+                          showFeedbackList(context, cours);
                         },
                         child: AnimatedContainer(
                           duration: Duration(milliseconds: 300),
@@ -120,7 +121,7 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
     );
   }
 
-  Future<void> _showDeleteConfirmationDialog(
+  Future<void> showDeleteConfirmationDialog(
       BuildContext context, CoursProgramme cours) async {
     return showDialog<void>(
       context: context,
@@ -137,7 +138,7 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
             ),
             TextButton(
               onPressed: () {
-                _deleteCours(cours);
+                deleteCours(cours);
                 Navigator.of(context).pop();
               },
               child: Text('Oui'),
@@ -148,7 +149,7 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
     );
   }
 
-  Future<void> _showFeedbackList(BuildContext context, CoursProgramme cours) async {
+  Future<void> showFeedbackList(BuildContext context, CoursProgramme cours) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -182,13 +183,97 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
     );
   }
 
-  void _deleteCours(CoursProgramme cours) {
+  void deleteCours(CoursProgramme cours) {
     setState(() {
       widget.coursList.remove(cours);
     });
   }
 
-  Future<void> _showModificationDialog(BuildContext context, CoursProgramme cours) async {
+  Future<void> showModificationDialog(BuildContext context, CoursProgramme cours) async {
     
   }
+}*/
+
+
+
+class CoursProgrammeTable extends StatelessWidget {
+ 
+  final List<CoursProgramme> cours;
+  final Function(CoursProgramme) onDelete ;
+  
+
+  CoursProgrammeTable({required this.cours , required this.onDelete });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        padding: EdgeInsets.all(16.0),
+        child: DataTable(
+          columns: [
+           
+           DataColumn(label: Text('Image')),
+            DataColumn(label: Text('Type')),
+            DataColumn(label: Text('Description ')),
+            DataColumn(
+              label: Center(child: Text('Actions')),
+            ),
+          ],
+          rows: cours.map((cour) {
+            return DataRow(cells: [
+             // DataCell(Text(program.id)),
+             DataCell(Text(cour.image)),
+              DataCell(Text(cour.type)),
+              DataCell(Container(
+                    width: 250,
+                    child: Center(child: Text(cour.description)),
+                  )),
+                DataCell(Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+        
+                      },
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        padding: EdgeInsets.all(8),
+                        child: Icon(Icons.edit, color: Colors.blue),
+                      ),
+                    ),
+                    Container(
+                      height: 24,
+                      width: 1,
+                      color: Colors.black,
+                    ),
+                    InkWell(
+                      onTap: () {
+                        onDelete(cour);
+                        
+                        
+                      },
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 300),
+                        padding: EdgeInsets.all(8),
+                        child: Icon(Icons.delete, color: Colors.red),
+                      ),
+                    ),
+                  ],
+                )),
+            
+              
+             // DataCell(Text(program.cours.join(', '))), // Join courses into a comma-separated string
+            ]);
+          }).toList(),
+        ),
+      ),
+    );
+  }
+  
+  
 }
+
+

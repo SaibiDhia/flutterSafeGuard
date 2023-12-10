@@ -11,7 +11,7 @@ class BarGraphCard extends StatelessWidget {
   final List<BarGraphModel> data = [
     BarGraphModel(
         lable: "Perfermance par cetegorie",
-        color: const Color.fromARGB(248, 43, 87, 245),
+        color: const Color.fromARGB(255, 233, 0, 144),
         graph: [
           GraphModel(x: 0, y: 8),
           GraphModel(x: 1, y: 10),
@@ -23,8 +23,8 @@ class BarGraphCard extends StatelessWidget {
         
     BarGraphModel(
         lable: "Taux de commentaire par programme",
-        color: const Color.fromARGB(255, 241, 179, 117),
-        graph: [
+        color: Color.fromARGB(255, 87, 9, 203),
+            graph: [
           GraphModel(x: 0, y: 8),
           GraphModel(x: 1, y: 10),
           GraphModel(x: 2, y: 9),

@@ -131,7 +131,7 @@ class _MenuState extends State<Menu> {
                          case 1: 
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) =>  DashboardProgramme()),
+                              builder: (context) =>   DashboardProgram ()),
                         );
 
                         break;
