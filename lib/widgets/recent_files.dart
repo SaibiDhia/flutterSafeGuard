@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../const.dart';
 import '../model/Catastrophe.dart';
+import 'AddCatastropheScreen.dart';
 import 'EditCatastropheScreen.dart';
 
 class RecentFiles extends StatefulWidget {
@@ -62,6 +63,20 @@ class _RecentFilesState extends State<RecentFiles> {
           Text(
             "Liste des catastrophes",
             style: Theme.of(context).textTheme.titleMedium,
+          ),
+          ElevatedButton(
+            onPressed: () {
+              // Navigate to the screen where the user can add a new catastrophe
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddCatastropheScreen(
+                    onAdd: _handleAddCatastrophe, // Pass callback for updating UI
+                  ),
+                ),
+              );
+            },
+            child: Text('Ajouter Catastrophe'),
           ),
           SizedBox(
             width: double.infinity,
@@ -172,6 +187,12 @@ class _RecentFilesState extends State<RecentFiles> {
     setState(() {
       _sortColumnIndex = columnIndex;
       _sortAscending = ascending;
+    });
+  }
+
+  void _handleAddCatastrophe(Catastrophe newCatastrophe) {
+    setState(() {
+      catastrophes.add(newCatastrophe);
     });
   }
 }
