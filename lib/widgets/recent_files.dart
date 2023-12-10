@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../const.dart';
 import '../model/Catastrophe.dart';
+import 'EditCatastropheScreen.dart';
 
 class RecentFiles extends StatefulWidget {
   const RecentFiles({Key? key}) : super(key: key);
@@ -40,6 +41,11 @@ class _RecentFilesState extends State<RecentFiles> {
     } else {
       throw Exception('Failed to load data');
     }
+  }
+
+  void updateData() {
+    fetchData(); // Fetch updated data from the backend server
+    setState(() {}); // Trigger a rebuild of the data table
   }
 
   @override
@@ -108,7 +114,13 @@ class _RecentFilesState extends State<RecentFiles> {
                   label: Text("Modifier"),
                 ),
               ],
-              source: _DataSource(context, catastrophes, _handleDelete),
+              source: _DataSource(
+                context,
+                catastrophes,
+                _handleDelete,
+                _handleEdit,
+                updateData, // Pass the callback function to the data source
+              ),
             ),
           ),
         ],
@@ -126,10 +138,24 @@ class _RecentFilesState extends State<RecentFiles> {
       setState(() {
         catastrophes.remove(catastrophe);
       });
+      updateData(); // Call the callback function to update the data table
     } else {
       // Delete failed, handle the error
       print('Failed to delete the catastrophe.');
     }
+  }
+
+  void _handleEdit(Catastrophe catastrophe) {
+    // Navigate to the edit screen/dialog and pass the selected catastrophe
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditCatastropheScreen(
+          catastrophe: catastrophe,
+          onUpdate: updateData, // Pass the callback function to the edit screen
+        ),
+      ),
+    );
   }
 
   void _sort<T extends Comparable>(
@@ -154,8 +180,16 @@ class _DataSource extends DataTableSource {
   final BuildContext context;
   final List<Catastrophe> catastrophes;
   final Function(Catastrophe) onDeletePressed;
+  final Function(Catastrophe) onEditPressed;
+  final Function() onUpdate; // Callback function to update the data table
 
-  _DataSource(this.context, this.catastrophes, this.onDeletePressed);
+  _DataSource(
+    this.context,
+    this.catastrophes,
+    this.onDeletePressed,
+    this.onEditPressed,
+    this.onUpdate,
+  );
 
   @override
   DataRow getRow(int index) {
@@ -181,6 +215,7 @@ class _DataSource extends DataTableSource {
             icon: Icon(Icons.delete),
             onPressed: () {
               onDeletePressed(catastrophe);
+              onUpdate(); // Call the callback function to update the data table
             },
           ),
         ),
@@ -188,7 +223,7 @@ class _DataSource extends DataTableSource {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              // Handle edit button press
+              onEditPressed(catastrophe);
             },
           ),
         ),

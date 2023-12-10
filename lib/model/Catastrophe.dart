@@ -34,4 +34,18 @@ class Catastrophe {
       longitudeDeCatastrophe: json['longitudeDeCatastrophe'].toDouble(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'titre': titre,
+      'type': type,
+      'description': description,
+      'date': date.toIso8601String(),
+      'radius': radius,
+      'magnitude': magnitude,
+      'latitudeDeCatastrophe': latitudeDeCatastrophe,
+      'longitudeDeCatastrophe': longitudeDeCatastrophe,
+    };
+  }
 }
