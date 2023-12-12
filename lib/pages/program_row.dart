@@ -1,15 +1,13 @@
-// widgets/program_row.dart
 import 'package:flutter/material.dart';
+import 'package:garduino_dashboard/widgets/program/addOrgramForm.dart';
 import '../model/program.dart';
 
-
 class ProgramTable extends StatelessWidget {
- 
   final List<Program> programs;
-  final Function(Program) onDelete ;
-  
+  final Function(Program) onDelete;
+  final Function(Program, Program) onUpdate;
 
-  ProgramTable({required this.programs , required this.onDelete});
+  ProgramTable({required this.programs, required this.onDelete, required this.onUpdate});
 
   @override
   Widget build(BuildContext context) {
@@ -22,73 +20,74 @@ class ProgramTable extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: DataTable(
           columns: [
-           
-          //DataColumn(label: Text('Image')),
             DataColumn(label: Text('Titre')),
             DataColumn(label: Text('Description du programme')),
-            DataColumn(
-              label: Center(child: Text('Actions')),
-            ),
+            DataColumn(label: Center(child: Text('Actions'))),
           ],
           rows: programs.map((program) {
             return DataRow(cells: [
-             // DataCell(Text(program.id)),
-             //DataCell(Text(program.image)),
               DataCell(Text(program.titre)),
               DataCell(Container(
-                    width: 250,
-                    child: Center(child: Text(program.descriptionProgramme)),
-                  )),
-                DataCell(Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-        
-                      },
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
-                        padding: EdgeInsets.all(8),
-                        child: Icon(Icons.edit, color: Colors.blue),
-                      ),
+                width: 250,
+                child: Center(child: Text(program.descriptionProgramme)),
+              )),
+              DataCell(Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      // Ouvrir le formulaire de mise à jour
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddProgramForm(
+                            onAdd: (titre, description, cours) {
+                              onUpdate(program, Program(
+                                id: program.id,
+                                titre: titre,
+                                descriptionProgramme: description,
+                                cours: cours,
+                              ));
+                            },
+                            // Remplir les champs du formulaire avec les valeurs actuelles
+                            titreController: TextEditingController(text: program.titre),
+                            descriptionController: TextEditingController(text: program.descriptionProgramme),
+                            coursController: TextEditingController(text: program.cours.join(', ')),
+                          ),
+                        ),
+                      );
+                    },
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 300),
+                      padding: EdgeInsets.all(8),
+                      child: Icon(Icons.edit, color: Colors.blue),
                     ),
-                    Container(
-                      height: 24,
-                      width: 1,
-                      color: Colors.black,
+                  ),
+                  Container(
+                    height: 24,
+                    width: 1,
+                    color: Colors.black,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      onDelete(program);
+                    },
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 300),
+                      padding: EdgeInsets.all(8),
+                      child: Icon(Icons.delete, color: Colors.red),
                     ),
-                    InkWell(
-                      onTap: () {
-                        onDelete(program);
-                        
-                        
-                      },
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
-                        padding: EdgeInsets.all(8),
-                        child: Icon(Icons.delete, color: Colors.red),
-                      ),
-                    ),
-                  ],
-                )),
-            
-              
-             // DataCell(Text(program.cours.join(', '))), // Join courses into a comma-separated string
+                  ),
+                ],
+              )),
             ]);
           }).toList(),
         ),
       ),
     );
   }
-  
-  
 }
 
-
-
-
-
-
-
+  
 
 
 /*

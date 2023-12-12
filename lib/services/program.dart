@@ -41,20 +41,20 @@ class ProgramService {
       throw Exception('Erreur lors de l\'ajout du programme');
     }
   }
-  Future<void> updateProgram(Program program) async {
-  final response = await http.put(
-    Uri.parse('http://localhost:9090/programme/${program.titre}'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(program.toJson()),
-  );
 
-  if (response.statusCode == 200) {
-    print('Programme mis à jour avec succès');
-  } else {
-    throw Exception('Erreur lors de la mise à jour du programme');
+  Future<void> updateProgram(String id, Program updatedProgram) async {
+    final response = await http.put(
+      Uri.parse('http://localhost:9090/programme/$id'), // Utilisez l'ID ici
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(updatedProgram.toJson()),
+    );
+
+    if (response.statusCode == 200) {
+      print('Programme mis à jour avec succès');
+    } else {
+      throw Exception('Erreur lors de la mise à jour du programme');
+    }
   }
-}
-
 }
