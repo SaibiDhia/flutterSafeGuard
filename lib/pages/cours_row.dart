@@ -309,7 +309,7 @@ class CoursProgrammeTable extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: DataTable(
           columns: [
-            DataColumn(label: Text('Image')),
+            //DataColumn(label: Text('Image')),
             DataColumn(label: Text('Type')),
             DataColumn(label: Text('Description ')),
             DataColumn(
@@ -318,7 +318,7 @@ class CoursProgrammeTable extends StatelessWidget {
           ],
           rows: cours.map((cour) {
             return DataRow(cells: [
-              DataCell(Text(cour.image)),
+              //DataCell(Text(cour.image)),
               DataCell(Text(cour.type)),
               DataCell(
                 Container(

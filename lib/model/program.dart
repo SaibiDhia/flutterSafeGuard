@@ -1,18 +1,18 @@
-import 'dart:convert'; 
+/*import 'dart:convert'; 
 import 'package:http/http.dart' as http;
 
 class Program {
   final String id;
   final String titre;
   final String descriptionProgramme;
-  final String image;
+  //final String image;
   List<String> cours; 
 
   Program({
     required this.id,
     required this.titre,
     required this.descriptionProgramme,
-    required this.image,
+   // required this.image,
     required this.cours,
   });
 
@@ -24,8 +24,45 @@ class Program {
       id: json['_id'],
       titre: json['Titre'],
       descriptionProgramme: json['descriptionProgramme'],
-      image: json['image'],
+     // image: json['image'],
       cours: coursList,
     );
+  }
+}*/
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+class Program {
+  final String id;
+  final String titre;
+  final String descriptionProgramme;
+  List<String> cours;
+
+  Program({
+    required this.id,
+    required this.titre,
+    required this.descriptionProgramme,
+    required this.cours,
+  });
+
+  factory Program.fromJson(Map<String, dynamic> json) {
+    List<String> coursList =
+        (json['cours'] as List).map((id) => id.toString()).toList();
+
+    return Program(
+      id: json['_id'],
+      titre: json['Titre'],
+      descriptionProgramme: json['descriptionProgramme'],
+      cours: coursList,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'Titre': titre,
+      'descriptionProgramme': descriptionProgramme,
+      'cours': cours,
+    };
   }
 }

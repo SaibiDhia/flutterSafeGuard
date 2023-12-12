@@ -23,7 +23,7 @@ class ProgramTable extends StatelessWidget {
         child: DataTable(
           columns: [
            
-           DataColumn(label: Text('Image')),
+          //DataColumn(label: Text('Image')),
             DataColumn(label: Text('Titre')),
             DataColumn(label: Text('Description du programme')),
             DataColumn(
@@ -33,7 +33,7 @@ class ProgramTable extends StatelessWidget {
           rows: programs.map((program) {
             return DataRow(cells: [
              // DataCell(Text(program.id)),
-             DataCell(Text(program.image)),
+             //DataCell(Text(program.image)),
               DataCell(Text(program.titre)),
               DataCell(Container(
                     width: 250,

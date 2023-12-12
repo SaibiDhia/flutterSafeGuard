@@ -52,7 +52,8 @@ class _AddCoursFormState extends State<AddCoursForm> {
     );
   }
 }
-*/ /*
+*/ 
+/*
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -79,17 +80,7 @@ class AddCoursForm extends StatefulWidget {
 class _AddCoursFormState extends State<AddCoursForm> {
   final TextEditingController typeController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController imageController = TextEditingController();
-
-  Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        imageController.text = pickedFile.path;
-      });
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -102,22 +93,8 @@ class _AddCoursFormState extends State<AddCoursForm> {
           controller: descriptionController,
           decoration: InputDecoration(labelText: 'Description'),
         ),
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: imageController,
-                decoration: InputDecoration(labelText: 'Image'),
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.image),
-              onPressed: _pickImage,
-            ),
-          ],
-        ),
-        SizedBox(height: 20),
-        ElevatedButton(
+        
+      ElevatedButton(
           onPressed: () {
             // Add your logic to handle the form submission
           },
@@ -128,92 +105,79 @@ class _AddCoursFormState extends State<AddCoursForm> {
   }
 }
 */
-import 'dart:io';
 import 'package:flutter/material.dart';
-import '../services/cours.dart'; // Assurez-vous d'importer votre service de cours
-import 'package:image_picker/image_picker.dart';
+import '../model/cours.dart';
 
-class AddCoursPage extends StatelessWidget {
-  final CoursService coursService = CoursService();
+class AjoutCours extends StatefulWidget {
+  final Function(CoursProgramme) onAjouter;
 
+  AjoutCours({required this.onAjouter});
+
+  @override
+  _AjoutCoursProgrammeState createState() => _AjoutCoursProgrammeState();
+}
+
+class _AjoutCoursProgrammeState extends State<AjoutCours> {
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController _type = TextEditingController();
+  TextEditingController _description = TextEditingController();
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ajouter un Cours'),
+        title: Text('Ajouter un nouveau cours'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: AddCoursForm(coursService: coursService),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              TextFormField(
+                controller: _type,
+                decoration: InputDecoration(labelText: 'Nom du Cours'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Veuillez entrer le nom du Cours';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _description,
+                decoration: InputDecoration(labelText: 'Description'),
+                validator: (value) {
+                 if (value == null || value.isEmpty) {
+                    return 'Veuillez entrer le nom du Cours';
+                  }
+                  return null;
+                },
+              ),
+             
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState?.validate() ?? false) {
+                   CoursProgramme nouveauCoursProgramme = CoursProgramme(
+                      id: '', // Provide the appropriate id value or leave it empty based on your application logic.
+                      type: _type.text,
+                      description: _description.text,
+                      
+                    );
+
+                    widget.onAjouter(nouveauCoursProgramme);
+                    Navigator.pop(context); // Close the add point page
+                  }
+                },
+                child: Text('Ajouter'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
-class AddCoursForm extends StatefulWidget {
-  final CoursService coursService;
-
-  AddCoursForm({required this.coursService});
-
-  @override
-  _AddCoursFormState createState() => _AddCoursFormState();
-}
-
-class _AddCoursFormState extends State<AddCoursForm> {
-  final TextEditingController typeController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController imageController = TextEditingController();
-
-  Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        imageController.text = pickedFile.path;
-      });
-    }
-  }
-
-  void _addCours() async {
-    await widget.coursService.addCoursProgramme(
-      type: typeController.text,
-      description: descriptionController.text,
-      image: File(imageController.text),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextField(
-          controller: typeController,
-          decoration: InputDecoration(labelText: 'Type'),
-        ),
-        TextField(
-          controller: descriptionController,
-          decoration: InputDecoration(labelText: 'Description'),
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: imageController,
-                decoration: InputDecoration(labelText: 'Image'),
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.image),
-              onPressed: _pickImage,
-            ),
-          ],
-        ),
-        SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: _addCours,
-          child: Text('Ajouter le Cours'),
-        ),
-      ],
-    );
-  }
-}
