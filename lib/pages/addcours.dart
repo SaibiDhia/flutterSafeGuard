@@ -52,7 +52,7 @@ class _AddCoursFormState extends State<AddCoursForm> {
     );
   }
 }
-*/ 
+*/
 /*
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -106,7 +106,7 @@ class _AddCoursFormState extends State<AddCoursForm> {
 }
 */
 import 'package:flutter/material.dart';
-import '../model/cours.dart';
+import '../../model/cours.dart';
 
 class AjoutCours extends StatefulWidget {
   final Function(CoursProgramme) onAjouter;
@@ -122,7 +122,7 @@ class _AjoutCoursProgrammeState extends State<AjoutCours> {
 
   TextEditingController _type = TextEditingController();
   TextEditingController _description = TextEditingController();
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -149,22 +149,20 @@ class _AjoutCoursProgrammeState extends State<AjoutCours> {
                 controller: _description,
                 decoration: InputDecoration(labelText: 'Description'),
                 validator: (value) {
-                 if (value == null || value.isEmpty) {
-                    return 'Veuillez entrer le nom du Cours';
+                  if (value == null || value.isEmpty) {
+                    return 'Veuillez entrer la description du Cours';
                   }
                   return null;
                 },
               ),
-             
               SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
-                   CoursProgramme nouveauCoursProgramme = CoursProgramme(
+                    CoursProgramme nouveauCoursProgramme = CoursProgramme(
                       id: '', // Provide the appropriate id value or leave it empty based on your application logic.
                       type: _type.text,
                       description: _description.text,
-                      
                     );
 
                     widget.onAjouter(nouveauCoursProgramme);
@@ -180,4 +178,3 @@ class _AjoutCoursProgrammeState extends State<AjoutCours> {
     );
   }
 }
-

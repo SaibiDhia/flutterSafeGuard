@@ -150,31 +150,27 @@ class _DashboardCoursState extends State<DashboardCours> {
     }
   }
 
-  void ajouterCoursProgramme(CoursProgramme nouveauCoursProgramme) async {
+  Future<void> ajouterCours(CoursProgramme nouveauCoursProgramme) async {
     try {
-      CoursProgramme coursCree =
-          await coursService.createCoursProgramme(nouveauCoursProgramme);
-
-      print('Nouveau cours ajouté : ${nouveauCoursProgramme.type}');
+      await coursService.addCours(nouveauCoursProgramme);
+      fetchCours(); // Rafraîchir la liste des cours après l'ajout
     } catch (error) {
-      print('Erreur lors de l\'ajout du cours : $error');
+      print('Erreur lors de l\'ajout du cours: $error');
     }
   }
 
-  void naviguerAjoutCours() {
-    Navigator.push(
+  void naviguerAjoutCours() async {
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => AjoutCours(
-          onAjouter: ajouterCoursProgramme,
+          onAjouter: ajouterCours,
         ),
       ),
-    ).then((value) {
-      // Rafraîchir la liste des cours après l'ajout
-      if (value != null && value) {
-        fetchCours();
-      }
-    });
+    );
+
+    // Rafraîchir la liste des cours après l'ajout
+    fetchCours();
   }
 
   @override

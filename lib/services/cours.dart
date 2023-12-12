@@ -27,22 +27,29 @@ class CoursService {
     }
   }
 
-  Future<CoursProgramme> createCoursProgramme(
-      CoursProgramme newCoursProgramme) async {
-    final response = await http.post(
-      Uri.parse('http://localhost:9090/cours/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(newCoursProgramme.toJson()),
-    );
+  Future<void> addCours(CoursProgramme coursProgramme) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:9090/cours/'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          'Type': coursProgramme
+              .type, // Assurez-vous que le champ Type est correctement défini
+          'description': coursProgramme.description,
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      final dynamic data = json.decode(response.body);
-      return CoursProgramme.fromJson(data);
-    } else {
-      throw Exception(
-          'Erreur lors de la création du cours. Réponse du serveur: ${response.body}');
+      if (response.statusCode == 200) {
+        print('Cours ajouté avec succès');
+      } else {
+        print(
+            'Erreur lors de l\'ajout du cours. Code : ${response.statusCode}');
+        print('Réponse du serveur : ${response.body}');
+      }
+    } catch (error) {
+      print('Erreur lors de l\'ajout du cours : $error');
     }
   }
 }
