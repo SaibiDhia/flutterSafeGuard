@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -137,20 +137,20 @@ class BlogPage extends StatelessWidget {
             Text(blog.creationDate, style: TextStyle(color: Colors.black)),
             Row(
               children: [
-                IconButton(
+                /*IconButton(
                   onPressed: () {
                     // Gérer le bouton Éditer
                     _showEditForm(context, blog);
                   },
                   icon: Icon(Icons.edit, color: Colors.green),
-                ),
-                IconButton(
+                ),*/
+                /*IconButton(
                   onPressed: () {
                     // Gérer le bouton Supprimer
                     _showDeleteConfirmation(context , blog.title);
                   },
                   icon: Icon(Icons.delete, color: Colors.red),
-                ),
+                ),*/
                IconButton(
                   onPressed: () {
                      // Gérer le bouton Détails
@@ -175,7 +175,7 @@ class BlogPage extends StatelessWidget {
     );
   }
 
- void _showEditForm(BuildContext context, Blog blog) {
+ /*void _showEditForm(BuildContext context, Blog blog) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -271,7 +271,7 @@ Widget _buildEditField(String label, String initialValue) {
       ],
     ),
   );
-}
+}*/
 
  void _showDetailsDialog(BuildContext context, Blog blog) {
   showDialog(
@@ -419,18 +419,18 @@ Widget _buildCommentRow(Map<String, String> comment) {
             style: TextStyle(color: Colors.black),
           ),
         ),
-        IconButton(
+        /*IconButton(
           onPressed: () {
             // Ajoutez ici la logique pour supprimer le commentaire avec l'ID associé
             print('Supprimer le commentaire avec ID ${comment['id']}');
           },
           icon: Icon(Icons.delete, color: Colors.red),
-        ),
+        ),*/
       ],
     ),
   );
 }
-void _showDeleteConfirmation(BuildContext context, String blogTitle) {
+/*void _showDeleteConfirmation(BuildContext context, String blogTitle) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -499,4 +499,325 @@ void _showDeleteConfirmation(BuildContext context, String blogTitle) {
 
 
 
+}*/
+*/
+
+
+
+
+
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+void main() {
+  runApp(const MaterialApp(
+    home: BlogPage(),
+  ));
+}
+
+class Blog {
+  String title;
+  String type;
+  String creationDate;
+  String image;
+  String dateDePrevention;
+  String region;
+  String pays;
+  String statement;
+  String description;
+
+  Blog({
+    required this.title,
+    required this.type,
+    required this.creationDate,
+    required this.image,
+    required this.dateDePrevention,
+    required this.region,
+    required this.pays,
+    required this.statement,
+    required this.description,
+  });
+}
+
+class BlogPage extends StatefulWidget {
+  const BlogPage({Key? key}) : super(key: key);
+
+  @override
+  _BlogPageState createState() => _BlogPageState();
+}
+
+class _BlogPageState extends State<BlogPage> {
+  late List<Blog> blogs;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final response = await http.get(Uri.parse("http://localhost:9090/information"));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        blogs = data.map((item) => Blog(
+          title: item['titre'],
+          type: item['typeCatastrophe'],
+          creationDate: item['createdAt'], // Mettez à jour la clé en fonction de votre modèle
+          image: item['image'],
+          dateDePrevention: item['dateDePrevention'],
+          region: item['region'],
+          pays: item['pays'],
+          statement: item['etat'],
+          description: item['descriptionInformation'],
+        )).toList();
+      });
+    } else {
+      print("Failed to load data: ${response.statusCode}");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Blog Page'),
+      ),
+      body: Stack(
+        children: [
+          Image.network(
+            "assets/images/backgroun2.jpg",
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          Container(
+            color: Colors.lightBlue.withOpacity(0.5),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white.withOpacity(0.2),
+                hintText: 'Search...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.8),
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            margin: const EdgeInsets.fromLTRB(16, 80, 16, 16),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Title', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+                    Text('Type of Catastrophe', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+                    Text('Creation Date', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+                    Text('Actions', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                if (blogs != null)
+                  for (Blog blog in blogs)
+                    _buildTableRow(blog, context),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTableRow(Blog blog, BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(blog.title, style: TextStyle(color: Colors.black)),
+            Text(blog.type, style: TextStyle(color: Colors.black)),
+            Text(blog.creationDate, style: TextStyle(color: Colors.black)),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    _showDetailsDialog(context, blog);
+                  },
+                  icon: Icon(Icons.details, color: Colors.blue),
+                ),
+                IconButton(
+                  onPressed: () {
+                    _showCommentsDialog(context, blog.title);
+                  },
+                  icon: Icon(Icons.comment, color: Colors.red),
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '$label :',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDetailsDialog(BuildContext context, Blog blog) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          title: Text(
+            'Détails du Blog',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildDetailRow('Titre', blog.title),
+              _buildDetailRow('Image', blog.image),
+              _buildDetailRow('Type de Catastrophe', blog.type),
+              _buildDetailRow('Date de Prevention', blog.dateDePrevention),
+              _buildDetailRow('Region', blog.region),
+              _buildDetailRow('Pays', blog.pays),
+              _buildDetailRow('Statement', blog.statement),
+              _buildDetailRow('Description', blog.description),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: TextButton.styleFrom(
+                primary: Colors.black,
+              ),
+              child: Text('Fermer'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showCommentsDialog(BuildContext context, String title) {
+    // Exemple de liste de commentaires avec identifiants uniques
+    List<Map<String, String>> comments = [
+      {'comment': 'Excellent article!', 'id': '1'},
+      {'comment': 'Thanks for sharing!', 'id': '2'},
+      {'comment': 'Interesting insights.', 'id': '3'},
+    ];
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Commentaires pour $title',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Divider(
+                  color: Colors.black,
+                  height: 1,
+                ),
+                const SizedBox(height: 8),
+                for (Map<String, String> comment in comments)
+                  _buildCommentRow(comment),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'Fermer',
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildCommentRow(Map<String, String> comment) {
+    final commentText = comment['comment'] ?? '';
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Icon(Icons.account_circle, size: 40, color: Colors.blue),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              commentText,
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
