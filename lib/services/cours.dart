@@ -77,4 +77,22 @@ Future<Map<String, int>> getStatistiqueNombreFavorisParTypeCours() async {
     return Map<String, int>(); 
   }
 }
+
+  Future<Map<String, int>?> getStatistiqueNombreCommentairesParTypeCours() async {
+    try {
+      final response = await http.get(Uri.parse('http://localhost:9090/commentairesProgramme/stat'));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        final Map<String, int> statistiques = Map<String, int>.from(data);
+        return statistiques;
+      } else {
+        throw Exception('Échec de la requête : ${response.reasonPhrase}');
+      }
+    } catch (error) {
+      print('Erreur lors de la récupération des statistiques des commentaires : $error');
+      throw Exception('Erreur serveur');
+    }
+  }
+
 }

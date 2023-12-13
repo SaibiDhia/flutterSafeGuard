@@ -4,20 +4,20 @@ import 'package:garduino_dashboard/responsive.dart';
 import 'package:garduino_dashboard/services/cours.dart';
 import 'package:garduino_dashboard/widgets/custom_card.dart';
 
-class BarGraphCard extends StatefulWidget {
-  BarGraphCard({Key? key}) : super(key: key);
+class CommentairesBarGraphCard extends StatefulWidget {
+  CommentairesBarGraphCard({Key? key}) : super(key: key);
 
   @override
-  _BarGraphCardState createState() => _BarGraphCardState();
+  _CommentairesBarGraphCardState createState() => _CommentairesBarGraphCardState();
 }
 
-class _BarGraphCardState extends State<BarGraphCard> {
+class _CommentairesBarGraphCardState extends State<CommentairesBarGraphCard> {
   final CoursService coursService = CoursService();
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Map<String, int>?>(
-      future: coursService.getStatistiqueNombreFavorisParTypeCours(),
+      future: coursService.getStatistiqueNombreCommentairesParTypeCours(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -48,7 +48,7 @@ class _BarGraphCardState extends State<BarGraphCard> {
       ),
       itemBuilder: (context, i) {
         final typesCours = data.keys.toList();
-        final favorisCounts = data.values.toList();
+        final commentairesCounts = data.values.toList();
 
         return CustomCard(
           padding: const EdgeInsets.all(5),
@@ -58,7 +58,7 @@ class _BarGraphCardState extends State<BarGraphCard> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Favoris par Cours',
+                  'Nombres des commentaires par cours',
                   style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -76,17 +76,15 @@ class _BarGraphCardState extends State<BarGraphCard> {
                 child: BarChart(
                   BarChartData(
                     barGroups: _chartGroups(
-                      points: favorisCounts,
-                      color: const Color.fromARGB(255, 233, 0, 144),
+                      points: commentairesCounts,
+                      color: const Color.fromARGB(255, 0, 128, 255),
                     ),
                     borderData: FlBorderData(border: const Border()),
                     gridData: FlGridData(show: false),
                     titlesData: FlTitlesData(
                       bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          //getTitles: (value) => typesCours[value.toInt()],
-                        ),
+                       // showTitles: true,
+                        //getTitles: (value) => typesCours[value.toInt()],
                       ),
                       leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
                       topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),

@@ -54,11 +54,11 @@ class _StatistiquesPageState extends State<StatistiquesPage> {
             contentPadding: EdgeInsets.all(16.0),
             title: Text(
               'Type de cours: $typeCours',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             subtitle: Text(
               'Nombre de favoris: $nombreFavoris',
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(fontSize: 14.0),
             ),
           ),
         );
