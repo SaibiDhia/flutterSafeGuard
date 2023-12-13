@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../services/cours.dart';
+import '../widgets/bar_graph_card.dart'; // Remplacez par le chemin correct
 
 class StatistiquesPage extends StatefulWidget {
   @override
@@ -37,8 +38,12 @@ class _StatistiquesPageState extends State<StatistiquesPage> {
 
   Widget _buildStatistiquesList(Map<String, int> statistiques) {
     return ListView.builder(
-      itemCount: statistiques.length,
+      itemCount: statistiques.length + 1, // Ajout d'une carte supplémentaire
       itemBuilder: (context, index) {
+        if (index == statistiques.length) {
+          // L'élément supplémentaire est la carte à barres
+          return BarGraphCard();
+        }
         final typeCours = statistiques.keys.toList()[index];
         final nombreFavoris = statistiques[typeCours];
 

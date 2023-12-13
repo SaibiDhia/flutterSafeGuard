@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
               Header(scaffoldKey: scaffoldKey),
               _height(context),
               //const ActivityDetailsCard(),
-              BarGraphCard(),
+             // BarGraphCard(),
               _height(context),
               LineChartCard(),
               _height(context),
