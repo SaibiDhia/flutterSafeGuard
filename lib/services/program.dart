@@ -57,4 +57,13 @@ class ProgramService {
       throw Exception('Erreur lors de la mise à jour du programme');
     }
   }
+  Future<List<Map<String, dynamic>>> fetchStatistiques() async {
+  final response = await http.get(Uri.parse('http://localhost:9090/programme/stat'));
+
+  if (response.statusCode == 200) {
+    return List<Map<String, dynamic>>.from(json.decode(response.body));
+  } else {
+    throw Exception('Erreur lors de la récupération des statistiques');
+  }
+}
 }

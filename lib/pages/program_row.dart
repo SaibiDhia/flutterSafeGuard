@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:garduino_dashboard/widgets/program/addOrgramForm.dart';
 import '../model/program.dart';
 
 class ProgramTable extends StatelessWidget {
@@ -35,26 +34,7 @@ class ProgramTable extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      // Ouvrir le formulaire de mise à jour
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddProgramForm(
-                            onAdd: (titre, description, cours) {
-                              onUpdate(program, Program(
-                                id: program.id,
-                                titre: titre,
-                                descriptionProgramme: description,
-                                cours: cours,
-                              ));
-                            },
-                            // Remplir les champs du formulaire avec les valeurs actuelles
-                            titreController: TextEditingController(text: program.titre),
-                            descriptionController: TextEditingController(text: program.descriptionProgramme),
-                            coursController: TextEditingController(text: program.cours.join(', ')),
-                          ),
-                        ),
-                      );
+                      _showUpdateDialog(context, program);
                     },
                     child: AnimatedContainer(
                       duration: Duration(milliseconds: 300),
@@ -85,145 +65,56 @@ class ProgramTable extends StatelessWidget {
       ),
     );
   }
-}
 
-  
+  void _showUpdateDialog(BuildContext context, Program program) {
+    String titre = program.titre;
+    String description = program.descriptionProgramme;
 
-
-/*
-class ProgramTable extends StatefulWidget {
-  final List<Program> programs;
-
-  const ProgramTable({required this.programs});
-
-  @override
-  ProgramTableState createState() => ProgramTableState();
-}
-
-class ProgramTableState extends State<ProgramTable> {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: DataTable(
-          columnSpacing: 15.0, 
-          columns: <DataColumn>[
-            DataColumn(
-              label: Container(
-                width: 100, 
-                child: Center(child: Text('Titre')),
-              ),
-            ),
-            DataColumn(
-              label: Container(
-                width: 200, 
-                child: Center(child: Text('Description')),
-              ),
-            ),
-            DataColumn(
-              label: Container(
-                width: 100, 
-                child: Center(child: Text('Image')),
-              ),
-            ),
-            DataColumn(
-              label: Center(child: Text('Actions')),
-            ),
-          ],
-          rows: widget.programs.map((program) {
-            return DataRow(
-              cells: <DataCell>[
-                
-                DataCell(
-                  Container(
-                    width: 100,
-                    child: Center(child: Text(program.titre)),
-                  ),
-                ),
-                DataCell(
-                  Container(
-                    width: 200,
-                    child: Center(child: Text(program.descriptionProgramme)),
-                  ),
-                ),
-                /*DataCell(
-                  Container(
-                    width: 100,
-                    child: Center(child: Text(program.image)),
-                  ),
-                ),*/
-                DataCell(Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-        
-                      },
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
-                        padding: EdgeInsets.all(8),
-                        child: Icon(Icons.edit, color: Colors.blue),
-                      ),
-                    ),
-                    Container(
-                      height: 24,
-                      width: 1,
-                      color: Colors.black,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        showDeleteConfirmationDialog(context, program);
-                      },
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
-                        padding: EdgeInsets.all(8),
-                        child: Icon(Icons.delete, color: Colors.red),
-                      ),
-                    ),
-                  ],
-                )),
-              ],
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-  Future<void> showDeleteConfirmationDialog(
-      BuildContext context, Program program) async {
-    return showDialog<void>(
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirmation'),
-          content: Text('Êtes-vous sûr de vouloir supprimer le programme ?'),
-          actions: <Widget>[
+          title: Text('Mettre à jour le programme'),
+          content: Column(
+            children: [
+              TextField(
+                decoration: InputDecoration(labelText: 'Titre'),
+                controller: TextEditingController(text: titre),
+                onChanged: (value) {
+                  titre = value;
+                },
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: 'Description du programme'),
+                controller: TextEditingController(text: description),
+                onChanged: (value) {
+                  description = value;
+                },
+              ),
+            ],
+          ),
+          actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Non'),
+              child: Text('Annuler'),
             ),
             TextButton(
               onPressed: () {
-                deleteProgram(program);
+                onUpdate(program, Program(
+                  id: program.id,
+                  titre: titre,
+                  descriptionProgramme: description,
+                  cours: program.cours,
+                ));
                 Navigator.of(context).pop();
               },
-              child: Text('Oui'),
+              child: Text('Mettre à jour'),
             ),
           ],
         );
       },
     );
   }
-  void deleteProgram(Program program) {
-    setState(() {
-      widget.programs.remove(program);
-    });
-  }
 }
-*/

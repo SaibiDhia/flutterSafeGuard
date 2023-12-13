@@ -52,4 +52,29 @@ class CoursService {
       print('Erreur lors de l\'ajout du cours : $error');
     }
   }
+
+
+
+Future<Map<String, int>> getStatistiqueNombreFavorisParTypeCours() async {
+  final url = 'http://localhost:9090/favorie/stat';
+
+  try {
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+     
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      
+      Map<String, int> statistiquesFinale = Map<String, int>.from(jsonResponse);
+      return statistiquesFinale;
+    } else {
+      print('Erreur de requête : ${response.statusCode}');
+      return Map<String, int>(); 
+    }
+  } catch (error) {
+
+    print('Erreur lors de l\'envoi de la requête : $error');
+    return Map<String, int>(); 
+  }
+}
 }

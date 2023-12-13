@@ -176,6 +176,7 @@ import 'package:garduino_dashboard/pages/program_row.dart';
 import 'package:garduino_dashboard/services/program.dart';
 import 'package:garduino_dashboard/widgets/program/addOrgramForm.dart';
 
+
 class DashboardProgram extends StatefulWidget {
   @override
   _DashboardProgramState createState() => _DashboardProgramState();
@@ -197,7 +198,7 @@ class _DashboardProgramState extends State<DashboardProgram> {
     }
   }
 
-  Future<void> supprimerProgram(Program program) async {
+  Future<void> deleteProgram(Program program) async {
     try {
       await programService.deleteProgram(program.id);
       fetchPrograms(); // Rafraîchir la liste des programmes après la suppression
@@ -206,14 +207,14 @@ class _DashboardProgramState extends State<DashboardProgram> {
     }
   }
 
-  Future<void> ajouterProgram(
-      String titre, String description, List<String> cours) async {
+  Future<void> addProgram(String titre, String description, List<String> cours) async {
     try {
       Program program = Program(
-          id: '',
-          titre: titre,
-          descriptionProgramme: description,
-          cours: cours);
+        id: '', // Provide the appropriate id value or leave it empty based on your application logic.
+        titre: titre,
+        descriptionProgramme: description,
+        cours: cours,
+      );
       await programService.addProgram(program);
       fetchPrograms(); // Rafraîchir la liste des programmes après l'ajout
     } catch (error, stackTrace) {
@@ -222,16 +223,31 @@ class _DashboardProgramState extends State<DashboardProgram> {
     }
   }
 
-Future<void> mettreAJourProgram(Program program, Program updatedProgram) async {
-  try {
-    await programService.updateProgram(program.id, updatedProgram);
-    fetchPrograms(); // Rafraîchir la liste des programmes après la mise à jour
-  } catch (error, stackTrace) {
-    print('Erreur lors de la mise à jour du programme: $error');
-    print('Stack trace: $stackTrace');
+  Future<void> updateProgram(Program program, Program updatedProgram) async {
+    try {
+      await programService.updateProgram(program.id, updatedProgram);
+      fetchPrograms(); // Rafraîchir la liste des programmes après la mise à jour
+    } catch (error, stackTrace) {
+      print('Erreur lors de la mise à jour du programme: $error');
+      print('Stack trace: $stackTrace');
+    }
   }
-}
 
+  void navigateToAddProgram() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddProgramForm(
+          onAdd: addProgram,
+        ),
+      ),
+    ).then((value) {
+      // Rafraîchir la liste des programmes après l'ajout
+      if (value != null && value) {
+        fetchPrograms();
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -247,19 +263,7 @@ Future<void> mettreAJourProgram(Program program, Program updatedProgram) async {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddProgramForm(
-                    onAdd: ajouterProgram,
-                    titreController: TextEditingController(),
-                    descriptionController: TextEditingController(),
-                    coursController: TextEditingController(),
-                  ),
-                ),
-              );
-            },
+            onPressed: navigateToAddProgram,
           ),
         ],
       ),
@@ -268,10 +272,8 @@ Future<void> mettreAJourProgram(Program program, Program updatedProgram) async {
           Expanded(
             child: ProgramTable(
               programs: programs,
-              onDelete: supprimerProgram,
-              onUpdate: (program, updatedProgram) {
-                mettreAJourProgram(program, updatedProgram);
-              },
+              onDelete: deleteProgram,
+              onUpdate: updateProgram,
             ),
           ),
         ],

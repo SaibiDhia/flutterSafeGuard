@@ -15,6 +15,7 @@ import 'aboutUs.dart';
 import 'cultivate_page.dart';
 import '../widgets/program/dashboard_page.dart';
 import '../widgets/program/cours_page.dart';
+import '../pages/home/widgets/statistique.dart';
 
 class Menu extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -38,7 +39,9 @@ class _MenuState extends State<Menu> {
     MenuModel(icon: 'assets/svg/slack.svg', title: "Cultivate"),*/
     MenuModel(icon: 'assets/svg/home.svg', title: "Program"),
     MenuModel(icon: 'assets/svg/home.svg', title: "Cours"),
+     MenuModel(icon: 'assets/svg/profile.svg', title: "About Us"),
     MenuModel(icon: 'assets/svg/signout.svg', title: "Exit"),
+   
    
   ];
 
@@ -142,7 +145,13 @@ class _MenuState extends State<Menu> {
                         );
 
                         break;
-                      case 3: //Exit
+                        case 3: //Cultivate Crops
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => StatistiquesPage ()),
+                        );
+                        break;
+                      case 4: //Exit
                         SystemNavigator.pop();
                       
                     }
