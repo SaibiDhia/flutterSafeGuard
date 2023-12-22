@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../model/program.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProgramTable extends StatelessWidget {
   final List<Program> programs;
@@ -19,12 +20,19 @@ class ProgramTable extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: DataTable(
           columns: [
+          DataColumn(label: Text('Image')),
             DataColumn(label: Text('Titre')),
             DataColumn(label: Text('Description du programme')),
             DataColumn(label: Center(child: Text('Actions'))),
           ],
           rows: programs.map((program) {
             return DataRow(cells: [
+             DataCell( CachedNetworkImage(
+                                        imageUrl: program.image,
+                                        placeholder: (context, url) => CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) => Icon(Icons.error),
+                                      ),
+                                      ),
               DataCell(Text(program.titre)),
               DataCell(Container(
                 width: 250,
@@ -107,6 +115,7 @@ class ProgramTable extends StatelessWidget {
                   titre: titre,
                   descriptionProgramme: description,
                   cours: program.cours,
+                  image: program.image,
                 ));
                 Navigator.of(context).pop();
               },

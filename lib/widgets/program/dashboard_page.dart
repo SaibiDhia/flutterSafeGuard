@@ -207,13 +207,15 @@ class _DashboardProgramState extends State<DashboardProgram> {
     }
   }
 
-  Future<void> addProgram(String titre, String description, List<String> cours) async {
+  Future<void> addProgram(String titre, String image, String description, List<String> cours) async {
     try {
       Program program = Program(
         id: '', // Provide the appropriate id value or leave it empty based on your application logic.
         titre: titre,
+        image: image,
         descriptionProgramme: description,
         cours: cours,
+
       );
       await programService.addProgram(program);
       fetchPrograms(); // Rafraîchir la liste des programmes après l'ajout

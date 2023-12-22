@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AddProgramForm extends StatefulWidget {
-  final Function(String, String, List<String>) onAdd;
+  final Function(String, String, String, List<String>) onAdd;
 
   AddProgramForm({required this.onAdd});
 
@@ -11,6 +11,7 @@ class AddProgramForm extends StatefulWidget {
 
 class _AddProgramFormState extends State<AddProgramForm> {
   TextEditingController _titreController = TextEditingController();
+   TextEditingController _imageController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _coursController = TextEditingController();
 
@@ -29,6 +30,10 @@ class _AddProgramFormState extends State<AddProgramForm> {
               controller: _titreController,
               decoration: InputDecoration(labelText: 'Titre'),
             ),
+             TextFormField(
+                          controller: _imageController,
+                          decoration: InputDecoration(labelText: 'Image'),
+                        ),
             TextFormField(
               controller: _descriptionController,
               decoration: InputDecoration(labelText: 'Description du programme'),
@@ -41,10 +46,11 @@ class _AddProgramFormState extends State<AddProgramForm> {
             ElevatedButton(
               onPressed: () {
                 String titre = _titreController.text;
+                String image= _imageController.text;
                 String description = _descriptionController.text;
                 List<String> cours = _coursController.text.split(',');
 
-                widget.onAdd(titre, description, cours);
+                widget.onAdd(titre,image, description, cours);
                 Navigator.pop(context); // Fermer le formulaire après l'ajout
               },
               child: Text('Ajouter'),

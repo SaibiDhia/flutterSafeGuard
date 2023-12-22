@@ -37,12 +37,14 @@ class Program {
   final String titre;
   final String descriptionProgramme;
   List<String> cours;
+  final String image;
 
   Program({
     required this.id,
     required this.titre,
     required this.descriptionProgramme,
     required this.cours,
+    required this.image,
   });
 
   factory Program.fromJson(Map<String, dynamic> json) {
@@ -53,7 +55,10 @@ class Program {
       id: json['_id'],
       titre: json['Titre'],
       descriptionProgramme: json['descriptionProgramme'],
+
       cours: coursList,
+      image: json['image'],
+
     );
   }
 
@@ -63,6 +68,7 @@ class Program {
       'Titre': titre,
       'descriptionProgramme': descriptionProgramme,
       'cours': cours,
+      'image': image,
     };
   }
 }
