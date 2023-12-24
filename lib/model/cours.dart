@@ -1,16 +1,16 @@
-import 'dart:convert'; 
-import 'package:http/http.dart' as http;
 
 class CoursProgramme{
-  final String id;
-  final String type;
+  final String? id;
+  final String Type;
   final String description;
+  final String image ;
 
 
  CoursProgramme({
-    required this.id,
-    required this.type,
+    this.id,
+    required this.Type,
     required this.description,
+    required this.image,
 
   });
 
@@ -19,18 +19,18 @@ class CoursProgramme{
 
     return CoursProgramme(
       id: json['_id'],
-      type: json['Type'],
+      Type: json['Type'],
       description: json['description'],
+      image: json['image'],
 
   
     );
   }
    Map<String, dynamic> toJson() {
     return {
-      'type': type,
+      'Type': Type,
       'description': description,
- 
-     
+       'image': image,
     };
    }
 }

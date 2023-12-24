@@ -41,33 +41,6 @@ class ProgramService {
       throw Exception('Erreur lors de l\'ajout du programme');
     }
   }
-  /*
-  Future<void> addProgram(String titre, String description, List<String> cours, File imageFile) async {
-    try {
-
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('http://localhost:9090/programme/'),
-      );
-
-      request.fields['Titre'] = titre;
-      request.fields['descriptionProgramme'] = description;
-      request.fields['cours'] = cours.join(',');
-      request.files.add(await http.MultipartFile.fromPath('image', imageFile.path));
-
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        print('Programme ajouté avec succès!');
-
-      } else {
-        print('Échec de l\'ajout du programme. Code de statut: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Erreur lors de l\'ajout du programme: $error');
-    }
-  }
-*/
   Future<void> updateProgram(String id, Program updatedProgram) async {
     final response = await http.put(
       Uri.parse('http://localhost:9090/programme/$id'), // Utilisez l'ID ici
