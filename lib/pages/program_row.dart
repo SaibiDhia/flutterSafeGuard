@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../model/program.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../../widgets/program/cours_page.dart';
+import '../model/program.dart';
 
 class ProgramTable extends StatelessWidget {
   final List<Program> programs;
@@ -13,82 +13,87 @@ class ProgramTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        padding: EdgeInsets.all(16.0),
-        child: DataTable(
-          columns: [
-            DataColumn(label: Text('Image')),
-            DataColumn(label: Text('Titre')),
-            DataColumn(label: Text('Description du programme')),
-            DataColumn(label: Center(child: Text('Actions'))),
-            DataColumn(label: Center(child: Text(''))),
-          ],
-          rows: programs.map((program) {
-            return DataRow(cells: [
-              DataCell(
-                CachedNetworkImage(
-                  imageUrl: program.image,
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
-              ),
-              DataCell(Text(program.titre)),
-              DataCell(
-                Container(
-                  width: 250,
-                  child: Center(child: Text(program.descriptionProgramme)),
-                ),
-              ),
-              DataCell(
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        _showUpdateDialog(context, program);
-                      },
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
-                        padding: EdgeInsets.all(8),
-                        child: Icon(Icons.edit, color: Colors.blue),
-                      ),
-                    ),
-                    Container(
-                      height: 24,
-                      width: 1,
-                      color: Colors.black,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        onDelete(program);
-                      },
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 300),
-                        padding: EdgeInsets.all(8),
-                        child: Icon(Icons.delete, color: Colors.red),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              DataCell(
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DashboardCours()),
-                      );
-                    },
-                    child: Text('Cours'),
+      child: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          padding: EdgeInsets.all(16.0),
+          child: DataTable(
+           // Réduire la taille du tableau
+            columns: [
+              DataColumn(label: Text('Image')),
+              DataColumn(label: Text('Titre')),
+              DataColumn(label: Text('Description du programme')),
+              DataColumn(label: Center(child: Text('Actions'))),
+              DataColumn(label: Center(child: Text(''))),
+            ],
+            rows: programs.map((program) {
+              return DataRow(cells: [
+                DataCell(
+                  CachedNetworkImage(
+                    imageUrl: program.image,
+                    width: 50, // Changer la largeur de l'image
+                    height: 50, // Changer la hauteur de l'image
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
-              ),
-            ]);
-          }).toList(),
+                DataCell(Text(program.titre)),
+                DataCell(
+                  Container(
+                    width: 150, // Ajuster la largeur du conteneur
+                    child: Center(child: Text(program.descriptionProgramme)),
+                  ),
+                ),
+                DataCell(
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          _showUpdateDialog(context, program);
+                        },
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 300),
+                          padding: EdgeInsets.all(8),
+                          child: Icon(Icons.edit, color: Colors.blue),
+                        ),
+                      ),
+                      Container(
+                        height: 24,
+                        width: 1,
+                        color: Colors.black,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          onDelete(program);
+                        },
+                        child: AnimatedContainer(
+                          duration: Duration(milliseconds: 300),
+                          padding: EdgeInsets.all(8),
+                          child: Icon(Icons.delete, color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                DataCell(
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => DashboardCours()),
+                        );
+                      },
+                      child: Text('Cours'),
+                    ),
+                  ),
+                ),
+              ]);
+            }).toList(),
+          ),
         ),
       ),
     );
