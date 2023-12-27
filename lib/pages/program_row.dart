@@ -21,6 +21,8 @@ class ProgramTable extends StatelessWidget {
           ),
           padding: EdgeInsets.all(16.0),
           child: DataTable(
+            dataRowHeight: 70.0,
+                 
             columns: [
               DataColumn(label: Text('Image')),
               DataColumn(label: Text('Titre')),
@@ -33,8 +35,8 @@ class ProgramTable extends StatelessWidget {
                 DataCell(
                   CachedNetworkImage(
                     imageUrl: program.image,
-                    width: 70,
-                    height: 70,
+                    width: 100,
+                    height: 100,
                     placeholder: (context, url) => CircularProgressIndicator(),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),

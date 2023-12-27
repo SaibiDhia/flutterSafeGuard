@@ -2,145 +2,164 @@ import 'package:flutter/material.dart';
 import '../model/cours.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class CoursProgrammeTable extends StatelessWidget {
+class CoursProgrammeTable extends StatefulWidget {
   final List<CoursProgramme> cours;
   final Function(CoursProgramme) onDelete;
 
   CoursProgrammeTable({required this.cours, required this.onDelete});
 
   @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.white),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          padding: EdgeInsets.all(16.0),
-          child: DataTable(
-            dataRowHeight: 120.0, // Ajuster la hauteur de chaque ligne
-            columnSpacing: 20.0, // Espacement entre les colonnes
-            horizontalMargin: 20.0, // Marge horizontale
+  _CoursProgrammeTableState createState() => _CoursProgrammeTableState();
+}
 
-            columns: [
-              DataColumn(label: Text('Image')),
-              DataColumn(label: Text('Type')),
-              DataColumn(label: Text('Description')),
-              DataColumn(
-                label: Center(child: Text('Actions')),
+class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
+  CoursProgramme? selectedCours;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Row(
+        children: [
+          // Partie du tableau
+          Expanded(
+            child: SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                padding: EdgeInsets.all(16.0),
+                child: DataTable(
+                  dataRowHeight: 120.0,
+                  columnSpacing: 20.0,
+                  horizontalMargin: 20.0,
+                  columns: [
+                    DataColumn(label: Text('Image')),
+                    DataColumn(label: Text('Type')),
+                    DataColumn(label: Text('Description')),
+                    DataColumn(
+                      label: Center(child: Text('Actions')),
+                    ),
+                  ],
+                  rows: widget.cours.map((cour) {
+                    return DataRow(cells: [
+                      DataCell(
+                        CachedNetworkImage(
+                          imageUrl: cour.image,
+                          width: 100,
+                          height: 100,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      ),
+                      DataCell(Text(cour.Type)),
+                      DataCell(
+                        Container(
+                          width: 700,
+                          height: double.infinity,
+                          child: Center(child: Text(cour.description)),
+                        ),
+                      ),
+                      DataCell(
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                // Action when edit icon is tapped
+                              },
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 300),
+                                padding: EdgeInsets.all(8),
+                                child: Icon(Icons.edit, color: Colors.blue),
+                              ),
+                            ),
+                            Container(
+                              height: 24,
+                              width: 1,
+                              color: Colors.black,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                widget.onDelete(cour);
+                              },
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 300),
+                                padding: EdgeInsets.all(8),
+                                child: Icon(Icons.delete, color: Colors.red),
+                              ),
+                            ),
+                            Container(
+                              height: 24,
+                              width: 1,
+                              color: Colors.black,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedCours = cour;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 300),
+                                padding: EdgeInsets.all(8),
+                                child: Icon(Icons.comment, color: Colors.green),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]);
+                  }).toList(),
+                ),
               ),
-            ],
-            rows: cours.map((cour) {
-              return DataRow(cells: [
-                DataCell(
-                  CachedNetworkImage(
-                    imageUrl: cour.image,
-                    width: 100,
-                    height: 100,
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
-                ),
-                DataCell(Text(cour.Type)),
-                DataCell(
-                  Container(
-                    width: 700 ,
-                    height: double.infinity,
-                    child: Center(child: Text(cour.description)),
-                  ),
-                ),
-                DataCell(
+            ),
+          ),
+          // Partie des commentaires
+          if (selectedCours != null)
+            Container(
+              width: MediaQuery.of(context).size.width * 0.4,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+             
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          // Action when edit icon is tapped
+                      Text(
+                        'Comments for ${selectedCours!.Type}',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.close, color: Colors.white),
+                        onPressed: () {
+                          setState(() {
+                            selectedCours = null;
+                          });
                         },
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 300),
-                          padding: EdgeInsets.all(8),
-                          child: Icon(Icons.edit, color: Colors.blue),
-                        ),
-                      ),
-                      Container(
-                        height: 24,
-                        width: 1,
-                        color: Colors.black,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          onDelete(cour);
-                        },
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 300),
-                          padding: EdgeInsets.all(8),
-                          child: Icon(Icons.delete, color: Colors.red),
-                        ),
-                      ),
-                      Container(
-                        height: 24,
-                        width: 1,
-                        color: Colors.black,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          _openCommentDrawer(context, cour);
-                        },
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 300),
-                          padding: EdgeInsets.all(8),
-                          child: Icon(Icons.comment, color: Colors.green),
-                        ),
                       ),
                     ],
                   ),
-                ),
-              ]);
-            }).toList(),
-          ),
-        ),
+                  SizedBox(height: 16),
+                  ListTile(
+                    title: Text('Comment 1', style: TextStyle(color: Colors.white)),
+                  ),
+                  ListTile(
+                    title: Text('Comment 2', style: TextStyle(color: Colors.white)),
+                  ),
+                 
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }
-
-  void _openCommentDrawer(BuildContext context, CoursProgramme cour) {
-    Scaffold.of(context).openEndDrawer();
-    Navigator.of(context).push(DrawerRoute(
-        builder: (BuildContext context) {
-          return Drawer(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppBar(
-                  title: Text('Comments'),
-                  actions: [
-                    IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-                ListTile(
-                  title: Text('Comment 1 for ${cour.Type}'),
-                ),
-                ListTile(
-                  title: Text('Comment 2 for ${cour.Type}'),
-                ),
-              ],
-            ),
-          );
-        },
-        settings: RouteSettings(name: 'drawer')));
-  }
-}
-
-
-
-class DrawerRoute extends MaterialPageRoute {
-  DrawerRoute({required WidgetBuilder builder, required RouteSettings settings})
-      : super(builder: builder, settings: settings);
 }
