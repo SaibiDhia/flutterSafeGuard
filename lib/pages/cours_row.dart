@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../model/cours.dart';
+import '../model/comment.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../services/cours.dart';
 
 class CoursProgrammeTable extends StatefulWidget {
   final List<CoursProgramme> cours;
@@ -14,13 +16,13 @@ class CoursProgrammeTable extends StatefulWidget {
 
 class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
   CoursProgramme? selectedCours;
+  List<Commentaire> comments = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
-          // Partie du tableau
           Expanded(
             child: SingleChildScrollView(
               child: Container(
@@ -44,14 +46,19 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
                   rows: widget.cours.map((cour) {
                     return DataRow(cells: [
                       DataCell(
-                        CachedNetworkImage(
-                          imageUrl: cour.image,
+                        Image.network(
+                          cour.image,
                           width: 100,
                           height: 100,
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
                         ),
                       ),
                       DataCell(Text(cour.Type)),
@@ -97,10 +104,11 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
                             ),
                             InkWell(
                               onTap: () {
-                                setState(() {
-                                  selectedCours = cour;
-                                });
-                              },
+  setState(() {
+    selectedCours = cour;
+  });
+  fetchComments(cour.id!);
+},
                               child: AnimatedContainer(
                                 duration: Duration(milliseconds: 300),
                                 padding: EdgeInsets.all(8),
@@ -116,7 +124,6 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
               ),
             ),
           ),
-          // Partie des commentaires
           if (selectedCours != null)
             Container(
               width: MediaQuery.of(context).size.width * 0.4,
@@ -124,7 +131,6 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
                 border: Border.all(color: Colors.white),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-             
               padding: EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,8 +140,7 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
                     children: [
                       Text(
                         'Comments for ${selectedCours!.Type}',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       IconButton(
                         icon: Icon(Icons.close, color: Colors.white),
@@ -148,13 +153,16 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
                     ],
                   ),
                   SizedBox(height: 16),
-                  ListTile(
-                    title: Text('Comment 1', style: TextStyle(color: Colors.white)),
+                  // Display comments
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: comments.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(comments[index].textComment),
+                      );
+                    },
                   ),
-                  ListTile(
-                    title: Text('Comment 2', style: TextStyle(color: Colors.white)),
-                  ),
-                 
                 ],
               ),
             ),
@@ -162,4 +170,14 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
       ),
     );
   }
+
+void fetchComments(String idCoursProgramme) {
+  CoursService().getCommentairesByCoursId(idCoursProgramme).then((List<Commentaire> response) {
+    setState(() {
+      comments = response;
+    });
+  }).catchError((error) {
+    print('Erreur lors de la recup des commentaires : $error');
+  });
+}
 }

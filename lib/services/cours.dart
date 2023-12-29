@@ -4,7 +4,6 @@ import '../model/cours.dart';
 import '../model/comment.dart';
 import 'package:http_parser/http_parser.dart';
 
-import 'dart:io';
 
 
 
@@ -146,17 +145,32 @@ Future<Map<String, int>> getStatistiqueNombreFavorisParTypeCours() async {
       throw Exception('Erreur serveur');
     }
   }
- static Future<Commentaire> getCommentairesByCoursId(String idCoursProgramme) async {
+ /*
+Future<List<Commentaire>> getCommentairesByCoursId(String idCoursProgramme) async {
   final response = await http.get(Uri.parse('http://localhost:9090/commentairesProgramme/$idCoursProgramme'));
 
   if (response.statusCode == 200) {
-    Map<String, dynamic> responseData = json.decode(response.body);
-    Commentaire commentaire = Commentaire.fromJson(responseData);
-    return commentaire;
+    print('Response Body: ${response.body}');
+
+    final List<dynamic> data = json.decode(response.body);
+    return data.map((item) => Commentaire.fromJson(item)).toList();
   } else {
-    throw Exception('Erreur lors de la récupération des commentaires.');
+    throw Exception('Erreur lors de la recup des commentaires');
+  }
+}*/
+Future<List<Commentaire>> getCommentairesByCoursId(String idCoursProgramme) async {
+  final response = await http.get(Uri.parse('http://localhost:9090/commentairesProgramme/$idCoursProgramme'));
+
+  if (response.statusCode == 200) {
+    final List<dynamic> data = json.decode(response.body);
+    // Vérifiez si la liste est vide, dans ce cas, retournez une liste vide de Commentaire
+    if (data.isEmpty) {
+      return [];
+    }
+    return data.map((item) => Commentaire.fromJson(item)).toList();
+  } else {
+    throw Exception('Erreur lors de la recup des commentaires');
   }
 }
-
 
 }
