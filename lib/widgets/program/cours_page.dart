@@ -114,12 +114,12 @@ void main() {
 }
 }
 */
+/*
 import 'package:flutter/material.dart';
 import '../../model/cours.dart';
 import '../../pages/cours_row.dart';
 import '../../services/cours.dart';
 import '../../pages/addcours.dart';
-
 
 class DashboardCours extends StatefulWidget {
   @override
@@ -151,8 +151,7 @@ class _DashboardCoursState extends State<DashboardCours> {
     }
   }
 
-  
-   void ajouterCours(CoursProgramme nouveauCoursProgramme) async {
+  void ajouterCours(CoursProgramme nouveauCoursProgramme) async {
     try {
       await coursService.addCours(
         nouveauCoursProgramme.Type,
@@ -160,7 +159,7 @@ class _DashboardCoursState extends State<DashboardCours> {
         nouveauCoursProgramme.image,
       );
 
-      fetchCours(); 
+      fetchCours();
 
       print('Nouveau cours ajouté : ${nouveauCoursProgramme.Type}');
     } catch (error) {
@@ -173,7 +172,7 @@ class _DashboardCoursState extends State<DashboardCours> {
       context,
       MaterialPageRoute(
         builder: (context) => AddCours(
-         onAjouter: ajouterCours,
+          onAjouter: ajouterCours,
         ),
       ),
     );
@@ -214,4 +213,109 @@ void main() {
   runApp(MaterialApp(
     home: DashboardCours(),
   ));
+}*/
+import 'package:flutter/material.dart';
+import 'package:garduino_dashboard/model/cours.dart';
+import 'package:garduino_dashboard/pages/addcours.dart';
+import 'package:garduino_dashboard/pages/cours_row.dart';
+import 'package:garduino_dashboard/services/cours.dart';
+
+
+class DashboardCours extends StatefulWidget {
+  @override
+  _DashboardCoursState createState() => _DashboardCoursState();
 }
+
+class _DashboardCoursState extends State<DashboardCours> {
+  CoursService coursService = CoursService();
+  List<CoursProgramme> cours = [];
+
+  Future<void> fetchCours() async {
+    try {
+      List<CoursProgramme> fetchedCours = await coursService.getCours();
+
+      setState(() {
+        cours = fetchedCours;
+      });
+    } catch (error) {
+      print('Erreur lors de la récupération des cours : $error');
+    }
+  }
+
+  Future<void> supprimerCours(CoursProgramme coursProgramme) async {
+    try {
+      await coursService.deleteCours(coursProgramme.id!);
+      fetchCours(); // Rafraîchir la liste des cours après la suppression
+    } catch (error) {
+      print('Erreur lors de la suppression de la cours: $error');
+    }
+  }
+
+  void ajouterOuMettreAJourCours({CoursProgramme? cours}) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddCours(
+          onAjouter: (nouveauCoursProgramme) async {
+            if (cours == null) {
+              // Ajouter un nouveau cours
+              await coursService.addCours(
+                nouveauCoursProgramme.Type,
+                nouveauCoursProgramme.description,
+                nouveauCoursProgramme.image,
+              );
+            } else {
+              // Mettre à jour le cours existant
+              await coursService.updateCours(
+                cours.id!,
+                nouveauCoursProgramme.Type,
+                nouveauCoursProgramme.description,
+                nouveauCoursProgramme.image,
+              );
+            }
+            fetchCours(); // Rafraîchir la liste des cours après l'ajout ou la mise à jour
+          },
+          cours: cours,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCours();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Tableau de bord des cours'),
+      ),
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () => ajouterOuMettreAJourCours(),
+            child: Text('Ajouter un cours'),
+          ),
+          Expanded(
+            child: CoursProgrammeTable(
+              cours: cours,
+              onDelete: supprimerCours,
+              onEdit: (cours) => ajouterOuMettreAJourCours(cours: cours),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: DashboardCours(),
+  ));
+}
+
+

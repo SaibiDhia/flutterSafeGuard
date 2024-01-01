@@ -28,8 +28,8 @@ class _DashboardProgramState extends State<DashboardProgram> {
 
   Future<void> deleteProgram(Program program) async {
     try {
-      await programService.deleteProgram(program.id);
-      fetchPrograms(); // Rafraîchir la liste des programmes après la suppression
+      await programService.deleteProgram(program.titre);
+      fetchPrograms(); 
     } catch (error) {
       print('Erreur lors de la suppression du programme: $error');
     }
