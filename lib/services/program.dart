@@ -40,7 +40,7 @@ Future<int> getTotalNombreProgrammes() async {
       throw Exception('Erreur lors de la suppression du programme');
     }
   }
-
+/*
   Future<void> addProgram(
       String titre, String description, List<String> cours, String image) async {
     try {
@@ -79,6 +79,48 @@ Future<int> getTotalNombreProgrammes() async {
       print('Erreur lors de l ajout du programme: $error');
     }
   }
+*/
+Future<void> addProgram(
+    String titre, String description, List<String> cours, String image) async {
+  try {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('http://localhost:9090/programme/'),
+    );
+
+    request.fields['Titre'] = titre;
+    request.fields['descriptionProgramme'] = description;
+    for (var i = 0; i < cours.length; i++) {
+      request.fields['cours[$i]'] = cours[i];
+    }
+
+    var imageResponse = await http.get(Uri.parse(image));
+    List<int> imageBytes = imageResponse.bodyBytes;
+
+    request.files.add(http.MultipartFile.fromBytes(
+      'source',
+      imageBytes,
+      filename: 'image.jpg',
+      contentType: MediaType('image', 'jpg'),
+    ));
+
+    print('Request Fields: ${request.fields}');
+    print('Request Files: ${request.files}');
+
+    var response = await request.send();
+    print('Response Status Code: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      print('Programme ajouté avec succès!');
+    } else {
+      print('Échec de l ajout du programme ${response.statusCode}');
+      print('Response Body: ${await response.stream.bytesToString()}');
+    }
+  } catch (error) {
+    print('Erreur lors de l ajout du programme: $error');
+  }
+}
+
   Future<void> updateProgram(String id, Program updatedProgram) async {
     final response = await http.put(
       Uri.parse('http://localhost:9090/programme/$id'), // Utilisez l'ID ici
