@@ -37,8 +37,8 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
                   horizontalMargin: 20.0,
                   columns: [
                     DataColumn(label: Text('Image')),
-                    DataColumn(label: Text('Type')),
-                    DataColumn(label: Text('Description')),
+                    DataColumn(label: Text('Chapitre')),
+                    DataColumn(label: Text('Contenu')),
                     DataColumn(
                       label: Center(child: Text('Actions')),
                     ),

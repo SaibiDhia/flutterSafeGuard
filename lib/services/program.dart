@@ -1,8 +1,23 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../model/program.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ProgramService {
+
+Future<int> getTotalNombreProgrammes() async {
+    final response = await http.get(Uri.parse('http://localhost:9090/programme/total/nb'));
+
+    if (response.statusCode == 200) {
+      final dynamic data = json.decode(response.body);
+      return data['Programme'] as int;
+    } else {
+      throw Exception('Erreur lors de la récupération du nombre total de programme');
+    }
+  }
+
+
+
   Future<List<Program>> getPrograms() async {
     final response =
         await http.get(Uri.parse('http://localhost:9090/programme/cours'));
@@ -26,19 +41,42 @@ class ProgramService {
     }
   }
 
-  Future<void> addProgram(Program program) async {
-    final response = await http.post(
-      Uri.parse('http://localhost:9090/programme/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(program.toJson()),
-    );
+  Future<void> addProgram(
+      String titre, String description, List<String> cours, String image) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://localhost:9090/programme/'),
+      );
 
-    if (response.statusCode == 200) {
-      print('Programme ajouté avec succès');
-    } else {
-      throw Exception('Erreur lors de l\'ajout du programme');
+      request.fields['Titre'] = titre;
+      request.fields['descriptionProgramme'] = description;
+      request.fields['cours'] = jsonEncode(cours);
+
+      var imageResponse = await http.get(Uri.parse(image));
+      List<int> imageBytes = imageResponse.bodyBytes;
+
+      request.files.add(http.MultipartFile.fromBytes(
+        'source',
+        imageBytes,
+        filename: 'image.jpg',
+        contentType: MediaType('image', 'jpg'),
+      ));
+
+      print('Request Fields: ${request.fields}');
+      print('Request Files: ${request.files}');
+
+      var response = await request.send();
+      print('Response Status Code: ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        print('Programme ajouté avec succès!');
+      } else {
+        print('Échec de l ajout du programme ${response.statusCode}');
+        print('Response Body: ${await response.stream.bytesToString()}');
+      }
+    } catch (error) {
+      print('Erreur lors de l ajout du programme: $error');
     }
   }
   Future<void> updateProgram(String id, Program updatedProgram) async {

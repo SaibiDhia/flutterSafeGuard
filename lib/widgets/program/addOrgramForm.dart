@@ -1,57 +1,84 @@
 import 'package:flutter/material.dart';
-
+import 'package:image_picker/image_picker.dart';
+import '../../model/program.dart';
 class AddProgramForm extends StatefulWidget {
-  final Function(String, String, String, List<String>) onAdd;
+  
+  final Function(Program) onAdd;
 
   AddProgramForm({required this.onAdd});
 
   @override
-  _AddProgramFormState createState() => _AddProgramFormState();
+  _AddProgramState createState() => _AddProgramState();
 }
 
-class _AddProgramFormState extends State<AddProgramForm> {
-  TextEditingController _titreController = TextEditingController();
-   TextEditingController _imageController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _coursController = TextEditingController();
+class _AddProgramState extends State<AddProgramForm> {
+  TextEditingController _Titre = TextEditingController();
+  TextEditingController _description = TextEditingController();
+   TextEditingController _cours = TextEditingController();
+  String? _selectedImagePath;
+
+  Future<void> _pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+   print(pickedFile);
+      setState(() {
+        _selectedImagePath = pickedFile.path;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ajouter un programme'),
+        title: Text('Ajouter un nouveau programme'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextFormField(
-              controller: _titreController,
+              controller: _Titre,
               decoration: InputDecoration(labelText: 'Titre'),
             ),
-             TextFormField(
-                          controller: _imageController,
-                          decoration: InputDecoration(labelText: 'Image'),
-                        ),
             TextFormField(
-              controller: _descriptionController,
-              decoration: InputDecoration(labelText: 'Description du programme'),
+              controller: _description,
+              decoration: InputDecoration(labelText: 'Description'),
             ),
-            TextFormField(
-              controller: _coursController,
+             TextFormField(
+              controller: _cours,
               decoration: InputDecoration(labelText: 'Cours (séparés par des virgules)'),
             ),
+            
+            ElevatedButton(
+              onPressed: _pickImage,
+              child: Text('Sélectionner une image'),
+            ),
+            _selectedImagePath != null
+                ? Text('Image URL: $_selectedImagePath')
+                : Container(),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
-                String titre = _titreController.text;
-                String image= _imageController.text;
-                String description = _descriptionController.text;
-                List<String> cours = _coursController.text.split(',');
+                String titre = _Titre.text;
+                String description = _description.text;
+                List<String> cours = _cours.text.split(',');
 
-                widget.onAdd(titre,image, description, cours);
-                Navigator.pop(context); // Fermer le formulaire après l'ajout
+                if (_selectedImagePath != null) {
+                  Program nouveauProgramme = Program(
+                    id: '', 
+                    titre: titre,
+                    descriptionProgramme: description,
+                    cours: cours,
+                    image: _selectedImagePath!,
+                  );
+
+                  widget.onAdd(nouveauProgramme);
+                  Navigator.pop(context); 
+                } else {
+                  print('Veuillez sélectionner une image.');
+                }
               },
               child: Text('Ajouter'),
             ),
@@ -61,3 +88,5 @@ class _AddProgramFormState extends State<AddProgramForm> {
     );
   }
 }
+
+

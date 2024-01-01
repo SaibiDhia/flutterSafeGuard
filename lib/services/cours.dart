@@ -18,12 +18,12 @@ class CoursService {
       request.fields['Type'] = type;
       request.fields['description'] = description;
 
-      // En supposant que "image" est l'URL de l'image, nous devons télécharger le contenu de l'image
+    
       var imageResponse = await http.get(Uri.parse(image));
       List<int> imageBytes = imageResponse.bodyBytes;
 
       request.files.add(http.MultipartFile.fromBytes(
-        'image',
+        'source',
         imageBytes,
         filename: 'image.jpg',
         contentType: MediaType('image', 'jpg'),
@@ -46,41 +46,7 @@ class CoursService {
     }
     
   }
-  /*
-   Future<void> addCours(String type, String description, File imageFile) async {
-    try {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('http://localhost:9090/cours/'),
-      );
-
-      request.fields['Type'] = type;
-      request.fields['description'] = description;
-
-      request.files.add(await http.MultipartFile.fromPath(
-        'image',
-        imageFile.path,
-      ));
-
-      print('Request Fields: ${request.fields}');
-      print('Request Files: ${request.files}');
-
-      var response = await request.send();
-
-      print('Response Status Code: ${response.statusCode}');
-
-      final res = await http.Response.fromStream(response);
-      print('Response Body: ${res.body}');
-      
-      if (response.statusCode == 200) {
-        print('Cours ajouté avec succès!');
-      } else {
-        print('Échec de l ajout du cours ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Erreur lors de l ajout du cours: $error');
-    }
-  }*/
+  
 
   Future<List<CoursProgramme>> getCours() async {
     final response = await http.get(Uri.parse('http://localhost:9090/cours/'));
@@ -145,19 +111,7 @@ Future<Map<String, int>> getStatistiqueNombreFavorisParTypeCours() async {
       throw Exception('Erreur serveur');
     }
   }
- /*
-Future<List<Commentaire>> getCommentairesByCoursId(String idCoursProgramme) async {
-  final response = await http.get(Uri.parse('http://localhost:9090/commentairesProgramme/$idCoursProgramme'));
-
-  if (response.statusCode == 200) {
-    print('Response Body: ${response.body}');
-
-    final List<dynamic> data = json.decode(response.body);
-    return data.map((item) => Commentaire.fromJson(item)).toList();
-  } else {
-    throw Exception('Erreur lors de la recup des commentaires');
-  }
-}*/
+ 
 Future<List<Commentaire>> getCommentairesByCoursId(String idCoursProgramme) async {
   final response = await http.get(Uri.parse('http://localhost:9090/commentairesProgramme/$idCoursProgramme'));
 

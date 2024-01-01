@@ -20,6 +20,7 @@ class _AddCoursState extends State<AddCours> {
     final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
+   print(pickedFile);
       setState(() {
         _selectedImagePath = pickedFile.path;
       });
@@ -60,14 +61,14 @@ class _AddCoursState extends State<AddCours> {
 
                 if (_selectedImagePath != null) {
                   CoursProgramme nouveauCoursProgramme = CoursProgramme(
-                    id: '', // Provide the appropriate id value or leave it empty based on your application logic.
+                    id: '', 
                     Type: Type,
                     description: description,
                     image: _selectedImagePath!,
                   );
 
                   widget.onAjouter(nouveauCoursProgramme);
-                  Navigator.pop(context); // Close the add point page
+                  Navigator.pop(context); 
                 } else {
                   print('Veuillez sélectionner une image.');
                 }

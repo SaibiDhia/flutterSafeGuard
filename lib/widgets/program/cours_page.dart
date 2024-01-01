@@ -120,7 +120,6 @@ import '../../pages/cours_row.dart';
 import '../../services/cours.dart';
 import '../../pages/addcours.dart';
 
-import 'dart:io';
 
 class DashboardCours extends StatefulWidget {
   @override
@@ -151,15 +150,7 @@ class _DashboardCoursState extends State<DashboardCours> {
       print('Erreur lors de la suppression de la cours: $error');
     }
   }
-/*
-  Future<void> ajouterCours(CoursProgramme nouveauCoursProgramme) async {
-    try {
-      await coursService.addCours(nouveauCoursProgramme);
-      fetchCours(); // Rafraîchir la liste des cours après l'ajout
-    } catch (error) {
-      print('Erreur lors de l\'ajout du cours: $error');
-    }
-  }*/
+
   
    void ajouterCours(CoursProgramme nouveauCoursProgramme) async {
     try {
@@ -169,7 +160,7 @@ class _DashboardCoursState extends State<DashboardCours> {
         nouveauCoursProgramme.image,
       );
 
-      fetchCours(); // Rafraîchir la liste des cours après l'ajout
+      fetchCours(); 
 
       print('Nouveau cours ajouté : ${nouveauCoursProgramme.Type}');
     } catch (error) {
@@ -186,8 +177,6 @@ class _DashboardCoursState extends State<DashboardCours> {
         ),
       ),
     );
-
-    // Rafraîchir la liste des cours après l'ajout
     fetchCours();
   }
 

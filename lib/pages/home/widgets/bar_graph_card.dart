@@ -48,12 +48,12 @@ class _BarGraphCardState extends State<BarGraphCard> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              'Favoris par Cours',
+              'Favoris par Chapitre',
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ),
           Container(
-            height: 200, // Ajustez la hauteur en fonction de vos besoins
+            height: 200, 
             child: BarChart(
               BarChartData(
                 barGroups: _chartGroups(

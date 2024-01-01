@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../services/cours.dart';
-import '../widgets/bar_graph_card.dart'; // Remplacez par le chemin correct
+import '../widgets/bar_graph_card.dart';
+import '../widgets/commentairegraph.dart';
 
 class StatistiquesPage extends StatefulWidget {
   @override
@@ -14,7 +15,7 @@ class _StatistiquesPageState extends State<StatistiquesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Statistiques des cours favoris par type'),
+        title: Text('Statistiques '),
       ),
       body: FutureBuilder<Map<String, int>?>(
         future: coursService.getStatistiqueNombreFavorisParTypeCours(),
@@ -28,24 +29,45 @@ class _StatistiquesPageState extends State<StatistiquesPage> {
               child: Text('Erreur: ${snapshot.error}'),
             );
           } else {
-            final statistiques = snapshot.data ?? {}; // Default to an empty map if null
-            return _buildStatistiquesList(statistiques);
+            final statistiques = snapshot.data ?? {};
+            return FutureBuilder<Map<String, int>?>(
+              future: coursService.getStatistiqueNombreCommentairesParTypeCours(),
+              builder: (context, commentaireSnapshot) {
+                if (commentaireSnapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (commentaireSnapshot.hasError) {
+                  return Center(
+                    child: Text('Erreur: ${commentaireSnapshot.error}'),
+                  );
+                } else {
+                  final commentairesStatistiques = commentaireSnapshot.data ?? {};
+                  return _buildStatistiquesList(statistiques, commentairesStatistiques);
+                }
+              },
+            );
           }
         },
       ),
     );
   }
 
-  Widget _buildStatistiquesList(Map<String, int> statistiques) {
+  Widget _buildStatistiquesList(Map<String, int> statistiques, Map<String, int> commentairesStatistiques) {
     return ListView.builder(
-      itemCount: statistiques.length + 1, // Ajout d'une carte supplémentaire
+      itemCount: statistiques.length + 2, 
       itemBuilder: (context, index) {
         if (index == statistiques.length) {
-          // L'élément supplémentaire est la carte à barres
+        
+          return CommentairesBarGraphCard();
+        } else if (index == statistiques.length + 1) {
+          
           return BarGraphCard();
         }
+
         final typeCours = statistiques.keys.toList()[index];
         final nombreFavoris = statistiques[typeCours];
+        final nombreCommentaires = commentairesStatistiques[typeCours] ?? 0;
 
         return Card(
           elevation: 2.0,
@@ -53,12 +75,21 @@ class _StatistiquesPageState extends State<StatistiquesPage> {
           child: ListTile(
             contentPadding: EdgeInsets.all(16.0),
             title: Text(
-              'Type de cours: $typeCours',
+              'Chapitre: $typeCours',
               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
-            subtitle: Text(
-              'Nombre de favoris: $nombreFavoris',
-              style: TextStyle(fontSize: 14.0),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Nombre de favoris: $nombreFavoris',
+                  style: TextStyle(fontSize: 14.0),
+                ),
+                Text(
+                  'Nombre de commentaires: $nombreCommentaires',
+                  style: TextStyle(fontSize: 14.0),
+                ),
+              ],
             ),
           ),
         );

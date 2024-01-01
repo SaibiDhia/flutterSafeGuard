@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:garduino_dashboard/responsive.dart';
 import 'package:garduino_dashboard/services/cours.dart';
 import 'package:garduino_dashboard/widgets/custom_card.dart';
 
@@ -47,7 +46,7 @@ class _CommentairesBarGraphCardState extends State<CommentairesBarGraphCard> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              'Comment par Cours',
+              'Comment par Chapitre',
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ),
