@@ -1,4 +1,5 @@
 class Catastrophe {
+  final String id;
   final String titre;
   final String type;
   final String description;
@@ -9,6 +10,7 @@ class Catastrophe {
   final double longitudeDeCatastrophe;
 
   Catastrophe({
+    required this.id,
     required this.titre,
     required this.type,
     required this.description,
@@ -21,6 +23,7 @@ class Catastrophe {
 
   factory Catastrophe.fromJson(Map<String, dynamic> json) {
     return Catastrophe(
+      id: json['_id'],
       titre: json['titre'],
       type: json['type'],
       description: json['description'],

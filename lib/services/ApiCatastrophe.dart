@@ -17,4 +17,16 @@ class ApiCatastrophe {
 
     return CatastropheList;
   }
+
+  static Future<void> deleteCatastropheWithId(String id) async {
+    var url = Uri.parse('http://127.0.0.1:9090/catastrophe/$id');
+    var response = await http.delete(url);
+
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Failed to delete catastrophe: ${response.statusCode}, ${response.body}');
+    } else {
+      print("catastrophe deleted");
+    }
+  }
 }
