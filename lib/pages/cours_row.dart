@@ -143,7 +143,7 @@ class _CoursProgrammeTableState extends State<CoursProgrammeTable> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Comments for ${selectedCours!.Type}',
+                        'Liste des commentaire pour ${selectedCours!.Type}',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
