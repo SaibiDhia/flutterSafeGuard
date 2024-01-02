@@ -1,18 +1,18 @@
-/*import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import 'package:garduino_dashboard/services/cours.dart';
 
 import 'package:garduino_dashboard/widgets/custom_card.dart';
 
-class BarGraphCard extends StatefulWidget {
-  BarGraphCard({Key? key}) : super(key: key);
+class BarStat extends StatefulWidget {
+  BarStat({Key? key}) : super(key: key);
 
   @override
-  _BarGraphCardState createState() => _BarGraphCardState();
+  _BarStat createState() => _BarStat();
 }
 
-class _BarGraphCardState extends State<BarGraphCard> {
+class _BarStat extends State<BarStat> {
   final CoursService coursService = CoursService();
 
   @override
@@ -48,7 +48,7 @@ class _BarGraphCardState extends State<BarGraphCard> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              'Favoris par Chapitre',
+              'Les plus 3 chapitres préférés',
               style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ),
@@ -96,4 +96,3 @@ class _BarGraphCardState extends State<BarGraphCard> {
         .toList();
   }
 }
-*/

@@ -113,7 +113,7 @@ class CoursService {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
-      // Vérifiez si la liste est vide, dans ce cas, retournez une liste vide de Commentaire
+     
       if (data.isEmpty) {
         return [];
       }
@@ -129,7 +129,7 @@ class CoursService {
       var request = http.MultipartRequest(
         'PUT',
         Uri.parse(
-            'http://localhost:9090/cours/$id'), // Mettez à jour l'URL selon votre configuration
+            'http://localhost:9090/cours/$id'), 
       );
 
       request.fields['Type'] = type;

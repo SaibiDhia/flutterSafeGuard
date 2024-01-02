@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../services/cours.dart';
-import '../widgets/bar_graph_card.dart';
+import '../widgets/favorie.dart';
 import '../widgets/commentairegraph.dart';
 
 class StatistiquesPage extends StatefulWidget {
@@ -58,11 +58,11 @@ class _StatistiquesPageState extends State<StatistiquesPage> {
       itemCount: statistiques.length + 2, 
       itemBuilder: (context, index) {
         if (index == statistiques.length) {
+         return BarStat();
         
-          return CommentairesBarGraphCard();
         } else if (index == statistiques.length + 1) {
           
-          return BarGraphCard();
+           return CommentairesBarGraphCard();
         }
 
         final typeCours = statistiques.keys.toList()[index];

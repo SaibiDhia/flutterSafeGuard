@@ -38,7 +38,7 @@ class _MenuState extends State<Menu> {
     MenuModel(icon: 'assets/svg/profile.svg', title: "About Us"),
     MenuModel(icon: 'assets/svg/slack.svg', title: "Cultivate"),*/
     MenuModel(icon: 'assets/svg/home.svg', title: "Program"),
-    MenuModel(icon: 'assets/svg/home.svg', title: "Cours"),
+
      MenuModel(icon: 'assets/svg/history.svg', title: "Statistique"),
     MenuModel(icon: 'assets/svg/signout.svg', title: "Exit"),
    
@@ -138,20 +138,14 @@ class _MenuState extends State<Menu> {
                         );
 
                         break;
+                      
                         case 2: 
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) =>  DashboardCours()),
-                        );
-
-                        break;
-                        case 3: //Cultivate Crops
                         Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) => StatistiquesPage ()),
                         );
                         break;
-                      case 4: //Exit
+                      case 3: //Exit
                         SystemNavigator.pop();
                       
                     }

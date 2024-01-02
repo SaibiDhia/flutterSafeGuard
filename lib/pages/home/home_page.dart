@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
               //const ActivityDetailsCard(),
              // BarGraphCard(),
               _height(context),
-              CommentairesBarGraphCard(),
+             // CommentairesBarGraphCard(),
               _height(context),
               
               LineChartCard(),
