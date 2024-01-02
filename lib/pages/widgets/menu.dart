@@ -2,16 +2,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:garduino_dashboard/Responsive.dart';
-import 'package:garduino_dashboard/main.dart';
-import 'package:garduino_dashboard/model/menu_modal.dart';
+import 'package:safeguard/Responsive.dart';
+import 'package:safeguard/model/menu_modal.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:garduino_dashboard/widgets/history.dart';
-import 'package:garduino_dashboard/widgets/notifications.dart';
-import 'package:garduino_dashboard/widgets/settings_page.dart';
+import 'package:safeguard/pages/Dashboard/widgets/Statistic.dart';
+import 'package:safeguard/pages/Profile/profile.dart';
+import 'package:safeguard/pages/home/widgets/statistique.dart';
+import 'package:safeguard/pages/widgets/dashboard_page.dart';
+import 'package:safeguard/pages/widgets/history.dart';
+import 'package:safeguard/pages/widgets/notifications.dart';
+import 'package:safeguard/pages/widgets/settings_page.dart';
+import 'package:safeguard/pages/widgets/program/dashboard_page.dart';
+import 'package:safeguard/widgets/map_page.dart';
+
 
 import 'controller_page.dart';
-import 'aboutUs.dart';
 import 'cultivate_page.dart';
 
 class Menu extends StatefulWidget {
@@ -27,14 +32,13 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   List<MenuModel> menu = [
     MenuModel(icon: 'assets/svg/home.svg', title: "Dashboard"),
-    MenuModel(icon: 'assets/svg/remote.svg', title: "Controller"),
+      MenuModel(icon: 'assets/svg/remote.svg', title: "Statistics"),
     //I just remove some stuff in this code that I think it will not needed soon.
     //MenuModel(icon: 'assets/svg/share-2.svg', title: "Connect"),
-    MenuModel(icon: 'assets/svg/bell.svg', title: "Notification"),
-    MenuModel(icon: 'assets/svg/history.svg', title: "History"),
-    MenuModel(icon: 'assets/svg/setting.svg', title: "Settings"),
-    MenuModel(icon: 'assets/svg/profile.svg', title: "About Us"),
-    MenuModel(icon: 'assets/svg/slack.svg', title: "Cultivate"),
+    MenuModel(icon: 'assets/svg/profile.svg', title: "Profile"),
+    MenuModel(icon: 'assets/svg/home.svg', title: "Map"),
+   MenuModel(icon: 'assets/svg/home.svg', title: "Program"),
+     MenuModel(icon: 'assets/svg/history.svg', title: "Statistique"),
     MenuModel(icon: 'assets/svg/signout.svg', title: "Exit"),
   ];
 
@@ -84,47 +88,42 @@ class _MenuState extends State<Menu> {
                       case 0: // Dashboard
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const MyApp()),
+                              builder: (context) => const ControllerPage()),
                         );
                         break;
-                      case 1: // Controller
+                      case 1: // SignIn
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const ControllerPage()),
+                              builder: (context) =>  const Statistic()),
                         );
                         break;
                       // Add similar cases for other menu items
                       case 2: //Notification
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const NotificationPage()),
+                              builder: (context) =>  ProfilePage()),
                         );
                         break;
                       case 3: //History
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const HistoryPage()),
+                              builder: (context) =>  MapPage()),
                         );
                         break;
                       case 4: //Settings
+                          Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) =>  DashboardProgram()),
+                          );
+                        break;
+                      case 5: //SignUp
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) => const SettingsPage2()),
+                              builder: (context) =>   StatistiquesPage())
                         );
                         break;
-                      case 5: //About Us
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => const AboutUsPage()),
-                        );
-                        break;
-                      case 6: //Cultivate Crops
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => const CultivatePage()),
-                        );
-                        break;
-                      case 7: //Exit
+                   
+                      case 6: //Exit
                         SystemNavigator.pop();
                       //close the application
                     }
