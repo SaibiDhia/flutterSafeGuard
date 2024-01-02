@@ -40,35 +40,3 @@ class CloudinaryService {
     }
   }
 }
-/*
-class CoursService {
-  static const String baseUrl = 'http://localhost:9090/cours';
-
-  static Future<void> addCours({
-    required String type,
-    required String description,
-    required String image,
-  }) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'Type': type,
-          'description': description,
-          'image': image,
-        }),
-      );
-
-      if (response.statusCode == 200) {
-        print('Course added successfully');
-      } else {
-        throw Exception('Failed to add course');
-      }
-    } catch (error) {
-      throw Exception('Error adding course: $error');
-    }
-  }
-}
-
-*/
