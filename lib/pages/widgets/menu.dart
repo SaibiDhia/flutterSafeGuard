@@ -7,14 +7,9 @@ import 'package:safeguard/model/menu_modal.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:safeguard/pages/Dashboard/widgets/Statistic.dart';
 import 'package:safeguard/pages/Profile/profile.dart';
-import 'package:safeguard/pages/home/widgets/statistique.dart';
-import 'package:safeguard/pages/widgets/dashboard_page.dart';
 import 'package:safeguard/pages/widgets/history.dart';
 import 'package:safeguard/pages/widgets/notifications.dart';
 import 'package:safeguard/pages/widgets/settings_page.dart';
-import 'package:safeguard/pages/widgets/program/dashboard_page.dart';
-import 'package:safeguard/widgets/map_page.dart';
-
 
 import 'controller_page.dart';
 import 'cultivate_page.dart';
@@ -36,9 +31,10 @@ class _MenuState extends State<Menu> {
     //I just remove some stuff in this code that I think it will not needed soon.
     //MenuModel(icon: 'assets/svg/share-2.svg', title: "Connect"),
     MenuModel(icon: 'assets/svg/profile.svg', title: "Profile"),
-    MenuModel(icon: 'assets/svg/home.svg', title: "Map"),
-   MenuModel(icon: 'assets/svg/home.svg', title: "Program"),
-     MenuModel(icon: 'assets/svg/history.svg', title: "Statistique"),
+    MenuModel(icon: 'assets/svg/history.svg', title: "History"),
+    MenuModel(icon: 'assets/svg/setting.svg', title: "Settings"),
+    MenuModel(icon: 'assets/svg/profile.svg', title: "Notification"),
+    MenuModel(icon: 'assets/svg/slack.svg', title: "Cultivate"),
     MenuModel(icon: 'assets/svg/signout.svg', title: "Exit"),
   ];
 
@@ -107,23 +103,28 @@ class _MenuState extends State<Menu> {
                       case 3: //History
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) =>  MapPage()),
+                              builder: (context) =>  HistoryPage()),
                         );
                         break;
                       case 4: //Settings
-                          Navigator.of(context).push(
+                        Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) =>  DashboardProgram()),
-                          );
+                              builder: (context) =>  SettingsPage2()),
+                        );
                         break;
                       case 5: //SignUp
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                              builder: (context) =>   StatistiquesPage())
+                              builder: (context) =>   NotificationPage())
                         );
                         break;
-                   
-                      case 6: //Exit
+                      case 6: //Cultivate Crops
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) =>  CultivatePage()),
+                        );
+                        break;
+                      case 7: //Exit
                         SystemNavigator.pop();
                       //close the application
                     }

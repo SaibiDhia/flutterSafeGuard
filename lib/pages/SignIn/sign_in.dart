@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:safeguard/model/user_model.dart';
 import 'package:safeguard/providers/user_provider.dart';
 import 'package:safeguard/pages/Dashboard/dashboard.dart';
 import 'package:safeguard/pages/ForgotPassword/forgot_password.dart';
@@ -64,15 +63,9 @@ class _SignInPageState extends State<SignInPage> {
                 final String password = _passwordController.text;
 
                 try {
-                  // Authenticate user
-                  User user = await Provider.of<UserProvider>(context, listen: false)
+                  await Provider.of<UserProvider>(context, listen: false)
                       .authenticateAdmin(email, password);
 
-                  // Save user details locally
-                  Provider.of<UserProvider>(context, listen: false)
-                      .saveUserDetailsLocally(user);
-
-                  // Navigate to Dashboard
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => DashBoard()),

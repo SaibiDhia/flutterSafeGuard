@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:safeguard/model/user_model.dart';
+
 void main() {
   runApp(const Statistic());
 }
 
 class Statistic extends StatelessWidget {
-  const Statistic({Key? key});
+  const Statistic({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +23,7 @@ class Statistic extends StatelessWidget {
 }
 
 class UserStatusBar extends StatefulWidget {
-  const UserStatusBar({Key? key});
+  const UserStatusBar({super.key});
 
   @override
   _UserStatusBarState createState() => _UserStatusBarState();
@@ -35,37 +33,10 @@ class _UserStatusBarState extends State<UserStatusBar>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
 
-  List<User> activeUsers = [];
-  List<User> bannedUsers = [];
-
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    // Replace the URL with your actual API endpoint
-    final apiUrl = 'http://127.0.0.1:9090/user/displayAllUsers';
-
-    try {
-      final response = await http.get(Uri.parse(apiUrl));
-      final List<User> users = (json.decode(response.body) as List)
-          .map((data) => User.fromJson(data))
-          .toList();
-
-      activeUsers = users
-          .where((user) => user.status == 'active')
-          .toList();
-      bannedUsers = users
-          .where((user) => user.status == 'banned')
-          .toList();
-
-      setState(() {});
-    } catch (error) {
-      print('Error fetching data: $error');
-    }
   }
 
   @override
@@ -76,35 +47,24 @@ class _UserStatusBarState extends State<UserStatusBar>
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
-            Tab(text: 'Active Users'),
-            Tab(text: 'Banned Users'),
+            Tab(text: 'Active'),
+            Tab(text: 'Banned'),
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
+        children: const [
           // Active Users Tab
-          buildUserList(activeUsers),
+          Center(
+            child: Text('Active Users'),
+          ),
 
           // Banned Users Tab
-          buildUserList(bannedUsers),
+          Center(
+            child: Text('Banned Users'),
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget buildUserList(List<User> users) {
-    return Center(
-      child: ListView.builder(
-        itemCount: users.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(users[index].userName ?? ''),
-            subtitle: Text('Email: ${users[index].email}'),
-            // Add more details if needed
-          );
-        },
       ),
     );
   }
@@ -120,4 +80,3 @@ class _UserStatusBarState extends State<UserStatusBar>
     super.dispose();
   }
 }
-
